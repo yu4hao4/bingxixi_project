@@ -46,16 +46,7 @@
         },
         //js的方法
         methods:{
-            login(){
-                // alert("用户名"+this.username+" 密码"+this.password)
-                postRequest("/login",{
-                    username:this.username,
-                    password:this.password,
-                })
-                    .then(resp => {
-                        
-                    })
-            }
+
         },
         //dom元素渲染时调用的方法
         mounted:{
