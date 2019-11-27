@@ -135,8 +135,14 @@
                         width="180">
                 </el-table-column>
                 <el-table-column
+                        prop="user_nick"
+                        label="用户昵称"
+                        sortable
+                        width="180">
+                </el-table-column>
+                <el-table-column
                         prop="user_realname"
-                        label="姓名"
+                        label="用户姓名"
                         sortable
                         width="180">
                 </el-table-column>
@@ -181,13 +187,11 @@
 </div>
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<!-- import Vue before Element -->
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
-<!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-<script src="js/utils.js"></script>
+<script src="../js/utils.js"></script>
 <script>
-    new Vue({
+    var _this = new Vue({
         el: '#app',
         //数据的存储位置
         data :{
@@ -291,6 +295,15 @@
             handleCurrentChange: function(val) {
                 console.log('当前页: ${val}');
             },
+            handleSearch: function() {
+                postRequest("/order?method=getOrders",{
+                    user_realname:_this.searchData.user_name,
+                    item_name:_this.searchData.item_name,
+                }).then(resp => {
+                    _this.tableData=[];
+                    _this.tableData=resp.data.data;
+                })
+            }
         },
         //dom元素渲染时调用的方法
         mounted:{

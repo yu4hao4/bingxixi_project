@@ -1,10 +1,10 @@
-let base = "http://localhost:8080";
+
 
 //post请求
 function postRequest (url, params) {
     return axios({
         method: 'post',
-        url: `${base}${url}`,
+        url: `${url}`,
         data: JSON.stringify(params),
         headers: {
             'Content-Type': 'application/json'
@@ -16,7 +16,7 @@ function postRequest (url, params) {
 function getRequest (url, params) {
     return axios({
         method: 'get',
-        url: `${base}${url}`,
+        url: `${url}`,
         params:params,
     });
 }
