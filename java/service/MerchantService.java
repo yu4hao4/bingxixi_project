@@ -16,7 +16,7 @@ public class MerchantService {
     }
 
     public List<Order> getOrders(Order order) {
-        if(order == null) {
+        if(order == null || order.getShop_id()==null) {
             return null;
         }
         return merchantDao.getOrders(order);

@@ -8,6 +8,10 @@ import java.util.Date;
  */
 public class Order {
     /**
+     * 商家ID
+     */
+    private Integer shop_id;
+    /**
      * 订单编号
      */
     private Integer order_id;
@@ -106,5 +110,13 @@ public class Order {
 
     public void setOrder_location(String order_location) {
         this.order_location = order_location;
+    }
+
+    public Integer getShop_id() {
+        return shop_id;
+    }
+
+    public void setShop_id(Integer shop_id) {
+        this.shop_id = shop_id;
     }
 }

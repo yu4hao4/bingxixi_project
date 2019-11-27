@@ -1,5 +1,6 @@
 package controller.merchant;
 
+import com.alibaba.fastjson.JSONObject;
 import entity.Order;
 import service.MerchantService;
 import utils.BaseServlet;
@@ -19,13 +20,28 @@ import java.util.List;
 public class OrderController extends BaseServlet {
     private MerchantService merchantService = new MerchantService();
 
+    /**
+     * 返回订单信息
+     * @param request
+     * @param response
+     */
     public void getOrders(HttpServletRequest request, HttpServletResponse response) {
-        String user_realname = request.getParameter("user_realname");
-        String item_name = request.getParameter("item_name");
+        String item_name = null;
+        String user_realname = null;
+        Integer shop_id = null;
+        try {
+            JSONObject data = JSONutil.getJSONAsInputStream(request.getInputStream());
+            item_name = data.getString("item_name");
+            user_realname = data.getString("user_realname");
+            shop_id = data.getInteger("shop_id");
+        } catch (IOException e) {
+            System.err.println("参数异常");
+        }
 
         Order order = new Order();
         order.setItem_name(item_name);
         order.setUser_realname(user_realname);
+        order.setShop_id(shop_id);
 
         List<Order> orders = merchantService.getOrders(order);
         try {

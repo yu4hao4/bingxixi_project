@@ -26,20 +26,21 @@ public class MerchantDao {
         List<Order> orders = new ArrayList<Order>();
         StringBuffer sql = new StringBuffer("select orders.order_id as order_id,orders.date as date," +
                 "user_info.user_realname as user_realname,user_info.user_nick as user_nick," +
-                "item.item_id as item_id,item.item_name as item_name,order.order_count as order_count," +
-                "order.order_location as order_location " +
+                "item.item_id as item_id,item.item_name as item_name,orders.order_count as order_count," +
+                "orders.order_location as order_location " +
                 "from orders,item,user_info " +
-                "where orders.item_id=item.item_id and orders.user_id=user_info.user_id");
+                "where orders.item_id=item.item_id and orders.user_id=user_info.user_id and item.shop_id=?");
         String user_realname = order.getUser_realname();
         String item_name = order.getItem_name();
+//        System.out.println(user_realname+","+item_name);
         /**
          * 判断是否有参数
          */
         if(user_realname != null && !user_realname.isEmpty()) {
-            sql.append(" and user_info.user_realname like '%?%'");
+            sql.append(" and user_info.user_realname like '%"+user_realname+"%'");
         }
         if(item_name != null && !item_name.isEmpty()) {
-            sql.append(" and item.item_name like '%?%'");
+            sql.append(" and item.item_name like '%"+item_name+"%'");
         }
         QueryRunner queryRunner = new QueryRunner();
         /**
@@ -47,18 +48,9 @@ public class MerchantDao {
          */
         Connection connection = JDBCUtil.getConn();
         try {
-            /**
-             * 通过传入的参数调用不同的方法
-             */
-            if(user_realname != null && !user_realname.isEmpty() && item_name != null && !item_name.isEmpty()) {
-                orders = queryRunner.query(connection,sql.toString(),new BeanListHandler<Order>(Order.class),user_realname,item_name);
-            }else if(user_realname != null && !user_realname.isEmpty()) {
-                orders = queryRunner.query(connection,sql.toString(),new BeanListHandler<Order>(Order.class),user_realname);
-            }else if(item_name != null && !item_name.isEmpty()) {
-                orders = queryRunner.query(connection,sql.toString(),new BeanListHandler<Order>(Order.class),item_name);
-            }else {
-                orders = queryRunner.query(connection,sql.toString(),new BeanListHandler<Order>(Order.class));
-            }
+            System.out.println(sql.toString());
+            System.out.println(order.getShop_id());
+            orders = queryRunner.query(connection,sql.toString(),new BeanListHandler<Order>(Order.class),order.getShop_id());
         }catch (SQLException e) {
             System.err.println("未知异常");
             return orders;
