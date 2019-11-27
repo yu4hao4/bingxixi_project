@@ -3,6 +3,7 @@ package controller.merchant;
 import com.alibaba.fastjson.JSONObject;
 import entity.Order;
 import service.MerchantService;
+import service.impl.MerchantServiceImpl;
 import utils.BaseServlet;
 import utils.JSONutil;
 
@@ -18,7 +19,8 @@ import java.util.List;
  */
 @WebServlet("/order")
 public class OrderController extends BaseServlet {
-    private MerchantService merchantService = new MerchantService();
+
+    private MerchantServiceImpl merchantService = new MerchantService();
 
     /**
      * 返回订单信息
