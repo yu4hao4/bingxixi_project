@@ -1,6 +1,7 @@
 package dao;
 
 import com.sun.tools.corba.se.idl.constExpr.Or;
+import dao.impl.MerchantDaoImpl;
 import entity.Order;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -16,12 +17,13 @@ import java.util.List;
  * @author BlockDusty
  * @date 2019/11/27 13:58
  */
-public class MerchantDao {
+public class MerchantDao implements MerchantDaoImpl {
     /**
      * 用于获取订单信息的方法
      * @param order
      * @return
      */
+    @Override
     public List<Order> getOrders(Order order) {
         List<Order> orders = new ArrayList<Order>();
         StringBuffer sql = new StringBuffer("select orders.order_id as order_id,orders.date as date," +
