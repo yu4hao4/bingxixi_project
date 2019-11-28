@@ -1,0 +1,26 @@
+Index: src/main/webapp/userFront/login.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/webapp/userFront/login.html	(date 1574413197745)
++++ src/main/webapp/userFront/login.html	(date 1574413197745)
+@@ -0,0 +1,17 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8">
++    <title>Title</title>
++    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
++</head>
++<body>
++<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
++<!-- import Vue before Element -->
++<script src="https://unpkg.com/vue/dist/vue.js"></script>
++<!-- import JavaScript -->
++<script src="https://unpkg.com/element-ui/lib/index.js"></script>
++<script src="js/utils.js"></script>
++
++</body>
++</html>
+\ No newline at end of file
