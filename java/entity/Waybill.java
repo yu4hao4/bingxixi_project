@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -28,11 +29,11 @@ public class Waybill implements Serializable {
     /**
      * 收货时间
      */
-    private Date get_date;
+    private String get_date;
     /**
      * 发货时间
      */
-    private Date send_date;
+    private String send_date;
 
     public Waybill() {
     }
@@ -69,19 +70,20 @@ public class Waybill implements Serializable {
         this.original = original;
     }
 
-    public Date getGet_date() {
+    public String getGet_date() {
         return get_date;
     }
 
     public void setGet_date(Date get_date) {
-        this.get_date = get_date;
+
+        this.get_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(get_date);
     }
 
-    public Date getSend_date() {
+    public String getSend_date() {
         return send_date;
     }
 
     public void setSend_date(Date send_date) {
-        this.send_date = send_date;
+        this.send_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(send_date);
     }
 }

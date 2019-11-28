@@ -130,19 +130,19 @@
                         prop="order_date"
                         label="日期"
                         sortable
-                        width="180">
+                        width="200">
                 </el-table-column>
                 <el-table-column
                         prop="user_nick"
-                        label="用户昵称"
+                        label="昵称"
                         sortable
-                        width="180">
+                        width="100">
                 </el-table-column>
                 <el-table-column
                         prop="user_realname"
-                        label="用户姓名"
+                        label="姓名"
                         sortable
-                        width="180">
+                        width="100">
                 </el-table-column>
                 <el-table-column
                         prop="item_name"
@@ -163,7 +163,8 @@
                 </el-table-column>
                 <el-table-column>
                     <template slot-scope="scope">
-                        <el-button class="el-button--success" @click="showDialog(scope.row)">发货</el-button>
+                        <el-button class="el-button--success" @click="showDialog(scope.row)" :disabled="canUse(scope.row)">发货</el-button>
+                        <el-button class="el-button--primary" @click="showInfos(scope.row)" :disabled="!canUse(scope.row)">查看详情</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -206,6 +207,33 @@
             <el-button type="primary" @click="sendOrderInfos()">确 定</el-button>
         </div>
     </el-dialog>
+
+    <el-dialog title="发货信息" :visible.sync="visible1">
+        <el-form :model="dialogData">
+            <el-form-item label="订单编号" :label-width="formLabelWidth">
+                <el-input v-model="dialogData.order_id" autocomplete="off" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="下单日期" :label-width="formLabelWidth">
+                <el-input v-model="dialogData.date" autocomplete="off" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="目的地" :label-width="formLabelWidth">
+                <el-input v-model="dialogData.destination" autocomplete="off" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="始发地" :label-width="formLabelWidth">
+                <el-input v-model="dialogData.original" autocomplete="off" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="运单号" :label-width="formLabelWidth">
+                <el-input v-model="dialogData.waybill_id" autocomplete="off" disabled></el-input>
+                <!--                <el-date-picker type="datetime" v-model="dialogData.send_date" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%;"></el-date-picker>-->
+            </el-form-item>
+            <el-form-item label="发货日期" :label-width="formLabelWidth">
+                <el-input v-model="dialogData.waybill_id" autocomplete="off" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="收货日期" :label-width="formLabelWidth">
+                <el-input v-model="dialogData.waybill_id" autocomplete="off" disabled></el-input>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
 </div>
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -232,9 +260,12 @@
                     destination:'',
                     waybill_id:'',
                     original:'',
+                    send_date:'',
+                    get_date:'',
                 },
                 activeIndex:3,
                 visible: false,
+                visible1:false,
                 input:'',
                 username:'',
                 password:'',
@@ -274,6 +305,21 @@
                     a.tableData=resp.data.data;
                 })
             },
+            showInfos: function(row) {
+                postRequest("/order?method=getWaybillInfo",{
+                    order_id:row.order_id,
+                }).then(resp => {
+                    var data = resp.data.data;
+                    _this.dialogData.order_id = data.order_id;
+                    _this.dialogData.date = row.date;
+                    _this.dialogData.destination = data.destination;
+                    _this.dialogData.waybill_id = data.waybill_id;
+                    _this.dialogData.original = data.original;
+                    _this.dialogData.send_date = data.send_date;
+                    _this.dialogData.get_date = data.get_date;
+                    _this.visible1 = true;
+                })
+            },
             showDialog: function(row) {
                 _this.dialogData.order_id=row.order_id;
                 _this.dialogData.date=row.order_date;
@@ -285,11 +331,15 @@
                         this.$message.success("发货成功");
                         _this.visible= false;
                         _this.dialogData=[];
+                        _this.handleSearch();
                     }else {
                         this.$message.error("发货失败,请重试");
                     }
                 })
-            }
+            },
+            canUse(row) {
+                return row.is_Send==='未发货'?false:true;
+            },
         },
         //dom元素渲染时调用的方法
         mounted:function() {

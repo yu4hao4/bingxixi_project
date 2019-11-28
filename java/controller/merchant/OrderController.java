@@ -58,7 +58,7 @@ public class OrderController extends BaseServlet {
     }
 
     /**
-     *
+     * 用于提交发货信息单
      * @param request
      * @param response
      */
@@ -66,6 +66,7 @@ public class OrderController extends BaseServlet {
         Boolean bool = false;
         try {
             JSONObject data = JSONutil. getJSONAsInputStream(request.getInputStream());
+            System.out.println(data);
             Waybill waybill = new Waybill();
             waybill.setOrder_id(data.getInteger("order_id"));
             waybill.setDestination(data.getString("destination"));
@@ -78,6 +79,29 @@ public class OrderController extends BaseServlet {
 
         try {
             response.getWriter().write((JSONutil.getJSON(bool).toString()));
+        } catch (IOException e) {
+            System.err.println("返回时发生错误");
+        }
+    }
+
+    /**
+     * 用来获取运单详情接口
+     * @param request
+     * @param response
+     */
+    public void getWaybillInfo (HttpServletRequest request, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        Waybill waybill = new Waybill();
+        try {
+            JSONObject data = JSONutil. getJSONAsInputStream(request.getInputStream());
+            System.out.println(data);
+            waybill.setOrder_id(data.getInteger("order_id"));
+        } catch (IOException e) {
+            System.err.println("参数异常");
+        }
+
+        try {
+            response.getWriter().write((JSONutil.getJSON(merchantService.getWaybillInfo(waybill)).toString()));
         } catch (IOException e) {
             System.err.println("返回时发生错误");
         }

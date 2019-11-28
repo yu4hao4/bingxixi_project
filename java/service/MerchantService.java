@@ -68,4 +68,17 @@ public class MerchantService implements MerchantServiceImpl {
         }
         return bool;
     }
+
+    /**
+     * 获得运单详情
+     * @param waybill
+     * @return
+     */
+    @Override
+    public Waybill getWaybillInfo(Waybill waybill) {
+        if(waybill == null || waybill.getOrder_id() == null) {
+            return null;
+        }
+        return merchantDao.getWaybillInfo(waybill);
+    }
 }

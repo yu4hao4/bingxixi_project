@@ -30,4 +30,11 @@ public interface MerchantServiceImpl {
      * @return
      */
     Boolean updateWaybillInfo(Waybill waybill);
+
+    /**
+     * 获得运单详情
+     * @param waybill
+     * @return
+     */
+    Waybill getWaybillInfo(Waybill waybill);
 }

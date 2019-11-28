@@ -30,4 +30,11 @@ import java.util.List;
      * @return
      */
     Integer updateWaybillInfo(Waybill waybill);
+
+    /**
+     * 获得订单信息
+     * @param waybill
+     * @return
+     */
+    Waybill getWaybillInfo(Waybill waybill);
 }

@@ -7,6 +7,7 @@ import entity.Waybill;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 import utils.JDBCUtil;
 
 import java.io.IOException;
@@ -79,20 +80,21 @@ public class MerchantDao implements MerchantDaoImpl {
         String sql = "select count(*) from waybill where order_id=?";
         Connection conn = JDBCUtil.getConn();
         QueryRunner queryRunner = new QueryRunner();
-        Integer count = 0;
+        Long count = 0l;
         try {
-            count = queryRunner.query(conn,sql,new BeanHandler<Integer>(Integer.class),order.getOrder_id());
+            count = queryRunner.query(conn,sql,new ScalarHandler<Long>(),order.getOrder_id());
         }catch (SQLException e) {
-            System.err.println("未知错误");
+            e.printStackTrace();
         }finally {
             try {
                 if(conn != null) {
                     conn.close();
                 }
             } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
-        return count;
+        return Integer.parseInt(count.toString());
     }
 
     /**
@@ -104,22 +106,67 @@ public class MerchantDao implements MerchantDaoImpl {
     public Integer updateWaybillInfo(Waybill waybill) {
         String sql = "insert into waybill (order_id,destination,original,waybill_id,send_date) " +
                 "values (?,?,?,?,?)";
+        String onInsert = "update orders set is_send='已发货' where order_id=?";
         Connection conn = JDBCUtil.getConn();
         QueryRunner queryRunner = new QueryRunner();
+        int updateLine1 = 0;
+        int updateLine2 = 0;
         int updateLine = 0;
         try {
-            updateLine = queryRunner.update(conn,sql,waybill.getOrder_id(),waybill.getDestination()
+            conn.setAutoCommit(false);
+            updateLine1 = queryRunner.update(conn,sql,waybill.getOrder_id(),waybill.getDestination()
                     ,waybill.getOriginal(),waybill.getWaybill_id(),new Date());
+            updateLine2 = queryRunner.update(conn,onInsert,waybill.getOrder_id());
         }catch (SQLException e) {
-            System.err.println("未知错误");
+            e.printStackTrace();
         }finally {
             try {
+                if(updateLine1 > 0 && updateLine2 > 0) {
+                    conn.commit();
+                    updateLine = 1;
+                }else {
+                    conn.rollback();
+                }
                 if(conn != null) {
                     conn.close();
                 }
             } catch (SQLException e) {
+                e.printStackTrace();
             }
+
         }
         return updateLine;
     }
+
+    /**
+     * 获得订单信息
+     * @param waybill
+     * @return
+     */
+    @Override
+     public Waybill getWaybillInfo(Waybill waybill) {
+         String sql = "select * from waybill where order_id=?";
+
+         QueryRunner queryRunner = new QueryRunner();
+         Connection conn = JDBCUtil.getConn();
+         List<Waybill> waybills = null;
+         try {
+              waybills = queryRunner.query(conn,sql,new BeanListHandler<Waybill>(Waybill.class),waybill.getOrder_id());
+         }catch (SQLException e) {
+             e.printStackTrace();
+         }finally {
+             try {
+                 if(conn != null) {
+                     conn.close();
+                 }
+             } catch (SQLException e) {
+                 e.printStackTrace();
+             }
+         }
+         if(waybills!=null && !waybills.isEmpty()) {
+             return waybills.get(0);
+         }else {
+             return null;
+         }
+     }
 }
