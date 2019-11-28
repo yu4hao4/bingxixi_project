@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -67,14 +68,14 @@
         <el-col :span="3">
             <el-aside width="200px">
                 <el-menu
-                        default-active="3"
+                        default-active="1-1"
                         class="el-menu-vertical-demo">
                     <el-submenu index="1">
                         <template slot="title">
                             <i class="el-icon-s-goods"></i>
                             <span>商品</span>
                         </template>
-                        <el-menu-item index="1-1" @click="location('selling.html')">
+                        <el-menu-item index="1-1">
                             <i class="el-icon-shopping-bag-1"></i>
                             <span slot="title">正在售卖</span>
                         </el-menu-item>
@@ -104,9 +105,7 @@
                 <div style="height: 20px"></div>
             </el-row>
             <el-row>
-                <el-col :span="4">
-                    <el-input v-model="searchData.user_name" placeholder="用户关键字"></el-input>
-                </el-col>
+
                 <el-col :span="4">
                     <el-input v-model="searchData.item_name" placeholder="商品关键字"></el-input>
                 </el-col>
@@ -122,49 +121,32 @@
                     style="width: 100%"
             >
                 <el-table-column
-                        prop="order_id"
-                        label="订单编号"
+                        prop="goods_icon"
+                        label="商品预览"
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="order_date"
-                        label="日期"
-                        sortable
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="user_nick"
-                        label="用户昵称"
-                        sortable
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="user_realname"
-                        label="用户姓名"
-                        sortable
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="item_name"
+                        prop="goods_name"
                         label="商品名"
+                        sortable
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="goods_id"
+                        label="商品ID"
+                        sortable
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="goods_explanation"
+                        label="商品描述"
+                        sortable
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="goods_stock"
+                        label="库存"
                         sortable>
-                </el-table-column>
-                <el-table-column
-                        prop="order_count"
-                        label="数量">
-                </el-table-column>
-                <el-table-column
-                        prop="order_location"
-                        label="配送地址">
-                </el-table-column>
-                <el-table-column
-                        prop="is_Send"
-                        label="是否发货">
-                </el-table-column>
-                <el-table-column>
-                    <template slot-scope="scope">
-                        <el-button class="el-button--success" @click="showDialog(scope.row)">发货</el-button>
-                    </template>
                 </el-table-column>
             </el-table>
             <el-row>
@@ -182,30 +164,6 @@
             </el-row>
         </el-col>
     </el-row>
-    <el-dialog title="发货信息" :visible.sync="visible">
-        <el-form :model="dialogData">
-            <el-form-item label="订单编号" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.order_id" autocomplete="off" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="订单创建日期" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.date" autocomplete="off" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="目的地" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.destination" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="始发地" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.original" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="运单号" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.waybill_id" autocomplete="off"></el-input>
-<!--                <el-date-picker type="datetime" v-model="dialogData.send_date" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%;"></el-date-picker>-->
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="visible = false">取 消</el-button>
-            <el-button type="primary" @click="sendOrderInfos()">确 定</el-button>
-        </div>
-    </el-dialog>
 </div>
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -226,21 +184,16 @@
                     user_name:'',
                     item_name:'',
                 },
-                dialogData:{
-                    order_id:'',
-                    date:'',
-                    destination:'',
-                    waybill_id:'',
-                    original:'',
-                },
                 activeIndex:3,
                 visible: false,
                 input:'',
                 username:'',
                 password:'',
                 currentPage: 1,
-                tableData: [],
-                formLabelWidth: '120px',
+                tableData: [
+                    {
+
+                    }],
             }
         },
         //js的方法
@@ -261,8 +214,8 @@
                     item_name:_this.searchData.item_name,
                 }).then(resp => {
                     _this.tableData=[];
-                    _this.tableData=resp.data.data;
-                })
+                _this.tableData=resp.data.data;
+            })
             },
             getLoginInfo: function (a) {
                 a.userData.shop_id='0';
@@ -271,25 +224,9 @@
                     shop_id:a.userData.shop_id,
                 }).then(resp => {
                     a.tableData=[];
-                    a.tableData=resp.data.data;
-                })
+                a.tableData=resp.data.data;
+            })
             },
-            showDialog: function(row) {
-                _this.dialogData.order_id=row.order_id;
-                _this.dialogData.date=row.order_date;
-                _this.visible=true;
-            },
-            sendOrderInfos: function () {
-                postRequest("/order?method=sendOrderInfos",_this.dialogData).then(resp=> {
-                    if(resp.data.data === true) {
-                        this.$message.success("发货成功");
-                        _this.visible= false;
-                        _this.dialogData=[];
-                    }else {
-                        this.$message.error("发货失败,请重试");
-                    }
-                })
-            }
         },
         //dom元素渲染时调用的方法
         mounted:function() {
