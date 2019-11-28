@@ -29,10 +29,12 @@ public class Waybill implements Serializable {
     /**
      * 收货时间
      */
+    private Date get_date_resourse;
     private String get_date;
     /**
      * 发货时间
      */
+    private Date send_date_resourse;
     private String send_date;
 
     public Waybill() {
@@ -74,16 +76,33 @@ public class Waybill implements Serializable {
         return get_date;
     }
 
-    public void setGet_date(Date get_date) {
-
-        this.get_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(get_date);
-    }
-
     public String getSend_date() {
         return send_date;
     }
 
-    public void setSend_date(Date send_date) {
-        this.send_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(send_date);
+    public Date getGet_date_resourse() {
+        return get_date_resourse;
+    }
+
+    public void setGet_date_resourse(Date get_date_resourse) {
+        this.get_date_resourse = get_date_resourse;
+        this.get_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(get_date_resourse);
+    }
+
+    public void setGet_date(String get_date) {
+        this.get_date = get_date;
+    }
+
+    public Date getSend_date_resourse() {
+        return send_date_resourse;
+    }
+
+    public void setSend_date_resourse(Date send_date_resourse) {
+        this.send_date_resourse = send_date_resourse;
+        this.send_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(send_date_resourse);
+    }
+
+    public void setSend_date(String send_date) {
+        this.send_date = send_date;
     }
 }
