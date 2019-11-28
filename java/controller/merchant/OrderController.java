@@ -2,6 +2,7 @@ package controller.merchant;
 
 import com.alibaba.fastjson.JSONObject;
 import entity.Order;
+import entity.Waybill;
 import service.MerchantService;
 import service.impl.MerchantServiceImpl;
 import utils.BaseServlet;
@@ -28,6 +29,8 @@ public class OrderController extends BaseServlet {
      * @param response
      */
     public void getOrders(HttpServletRequest request, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+
         String item_name = null;
         String user_realname = null;
         Integer shop_id = null;
@@ -46,8 +49,35 @@ public class OrderController extends BaseServlet {
         order.setShop_id(shop_id);
 
         List<Order> orders = merchantService.getOrders(order);
+
         try {
             response.getWriter().write(JSONutil.getJSON(orders).toString());
+        } catch (IOException e) {
+            System.err.println("返回时发生错误");
+        }
+    }
+
+    /**
+     *
+     * @param request
+     * @param response
+     */
+    public void sendOrderInfos(HttpServletRequest request, HttpServletResponse response) {
+        Boolean bool = false;
+        try {
+            JSONObject data = JSONutil. getJSONAsInputStream(request.getInputStream());
+            Waybill waybill = new Waybill();
+            waybill.setOrder_id(data.getInteger("order_id"));
+            waybill.setDestination(data.getString("destination"));
+            waybill.setOriginal(data.getString("original"));
+            waybill.setWaybill_id(data.getInteger("waybill_id"));
+            bool = merchantService.updateWaybillInfo(waybill);
+        } catch (IOException e) {
+            System.err.println("参数异常");
+        }
+
+        try {
+            response.getWriter().write((JSONutil.getJSON(bool).toString()));
         } catch (IOException e) {
             System.err.println("返回时发生错误");
         }

@@ -1,6 +1,7 @@
 package dao.impl;
 
 import entity.Order;
+import entity.Waybill;
 
 import java.util.List;
 
@@ -14,5 +15,19 @@ import java.util.List;
      * @param order
      * @return
      */
-    public List<Order> getOrders(Order order);
+    List<Order> getOrders(Order order);
+
+    /**
+     * 获取订单id在运单表中出现的次数
+     * @param order
+     * @return
+     */
+    Integer getWayBillCountByOrderId(Order order);
+
+    /**
+     * 上传运单信息
+     * @param waybill
+     * @return
+     */
+    Integer updateWaybillInfo(Waybill waybill);
 }

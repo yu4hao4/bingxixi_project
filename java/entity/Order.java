@@ -1,12 +1,15 @@
 package entity;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * @author BlockDusty
  * @date 2019/11/27 13:58
+ * 用于存放订单信息
  */
-public class Order {
+public class Order implements Serializable {
     /**
      * 商家ID
      */
@@ -19,6 +22,10 @@ public class Order {
      * 订单创建日期
      */
     private Date date;
+    /**
+     * 用于展示的日期
+     */
+    private String order_date;
     /**
      * 用户姓名
      */
@@ -43,6 +50,10 @@ public class Order {
      * 配送地址
      */
     private String order_location;
+    /**
+     * 是否发货
+     */
+    private String is_Send;
 
     public Order() {
 
@@ -62,6 +73,8 @@ public class Order {
 
     public void setDate(Date date) {
         this.date = date;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.order_date = simpleDateFormat.format(date);
     }
 
     public String getUser_realname() {
@@ -118,5 +131,17 @@ public class Order {
 
     public void setShop_id(Integer shop_id) {
         this.shop_id = shop_id;
+    }
+
+    public String getOrder_date() {
+        return order_date;
+    }
+
+    public String getIs_Send() {
+        return is_Send;
+    }
+
+    public void setIs_Send(String is_Send) {
+        this.is_Send = is_Send;
     }
 }

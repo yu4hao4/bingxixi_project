@@ -1,6 +1,7 @@
 package service.impl;
 
 import entity.Order;
+import entity.Waybill;
 
 import java.util.List;
 
@@ -14,5 +15,19 @@ public interface MerchantServiceImpl {
      * @param order
      * @return
      */
-    public List<Order> getOrders(Order order);
+    List<Order> getOrders(Order order);
+
+    /**
+     * 判断订单是否发货
+     * @param order
+     * @return
+     */
+    Boolean isOrderSent(Order order);
+
+    /**
+     * 上传用户提交的运单信息
+     * @param waybill
+     * @return
+     */
+    Boolean updateWaybillInfo(Waybill waybill);
 }
