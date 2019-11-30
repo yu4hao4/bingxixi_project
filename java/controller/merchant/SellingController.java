@@ -31,6 +31,7 @@ public class SellingController extends BaseServlet {
             JSONObject param = JSONutil.getJSONAsInputStream(request.getInputStream());
             String shop_id = (String)param.get("shop_id");
             String item_name = (String)param.get("item_name");
+            System.out.println(shop_id+","+item_name);
             Item item = new Item();
             item.setShop_id(Integer.parseInt(shop_id));
             item.setItem_name(item_name);

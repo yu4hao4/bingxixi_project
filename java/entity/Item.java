@@ -39,6 +39,10 @@ public class Item implements Serializable {
      * 审核状态
      */
     private String item_statu;
+    /**
+     * 商品余量
+     */
+    private Integer item_amount;
 
     public Item() {
 
@@ -106,5 +110,13 @@ public class Item implements Serializable {
 
     public void setItem_statu(String item_statu) {
         this.item_statu = item_statu;
+    }
+
+    public Integer getItem_amount() {
+        return item_amount;
+    }
+
+    public void setItem_amount(Integer item_amount) {
+        this.item_amount = item_amount;
     }
 }

@@ -176,9 +176,10 @@ public class MerchantDao implements MerchantDaoImpl {
      * @param item
      * @return
      */
+    @Override
     public List<Item> getItemInfos(Item item) {
         StringBuffer sql = new StringBuffer("select * from item where shop_id=?");
-        if(item.getItem_name() != null && item.getItem_name().isEmpty()) {
+        if(item.getItem_name() != null && !item.getItem_name().isEmpty()) {
             sql.append(" and item_name like '%");
             sql.append(item.getItem_name());
             sql.append("%'");

@@ -90,6 +90,7 @@ public class MerchantService implements MerchantServiceImpl {
      * @param item
      * @return
      */
+    @Override
     public List<Item> getItemInfos(Item item) {
         if(item != null && item.getShop_id() != null) {
             return merchantDao.getItemInfos(item);
