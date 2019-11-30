@@ -1,5 +1,6 @@
 package service.impl;
 
+import entity.Item;
 import entity.Order;
 import entity.Waybill;
 
@@ -37,4 +38,11 @@ public interface MerchantServiceImpl {
      * @return
      */
     Waybill getWaybillInfo(Waybill waybill);
+
+    /**
+     * 获得商品信息的方法
+     * @param item
+     * @return
+     */
+    List<Item> getItemInfos(Item item);
 }

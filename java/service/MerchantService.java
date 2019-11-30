@@ -2,10 +2,12 @@ package service;
 
 import dao.MerchantDao;
 import dao.impl.MerchantDaoImpl;
+import entity.Item;
 import entity.Order;
 import entity.Waybill;
 import service.impl.MerchantServiceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -80,5 +82,19 @@ public class MerchantService implements MerchantServiceImpl {
             return null;
         }
         return merchantDao.getWaybillInfo(waybill);
+    }
+
+
+    /**
+     * 获得商品信息的方法
+     * @param item
+     * @return
+     */
+    public List<Item> getItemInfos(Item item) {
+        if(item != null && item.getShop_id() != null) {
+            return merchantDao.getItemInfos(item);
+        }else {
+            return new ArrayList<Item>();
+        }
     }
 }

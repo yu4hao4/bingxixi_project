@@ -2,6 +2,7 @@ package dao;
 
 import com.sun.tools.corba.se.idl.constExpr.Or;
 import dao.impl.MerchantDaoImpl;
+import entity.Item;
 import entity.Order;
 import entity.Waybill;
 import org.apache.commons.dbutils.QueryRunner;
@@ -169,4 +170,38 @@ public class MerchantDao implements MerchantDaoImpl {
              return null;
          }
      }
+
+    /**
+     * 获得商品信息的方法
+     * @param item
+     * @return
+     */
+    public List<Item> getItemInfos(Item item) {
+        StringBuffer sql = new StringBuffer("select * from item where shop_id=?");
+        if(item.getItem_name() != null && item.getItem_name().isEmpty()) {
+            sql.append(" and item_name like '%");
+            sql.append(item.getItem_name());
+            sql.append("%'");
+        }
+
+        QueryRunner queryRunner = new QueryRunner();
+        Connection conn = JDBCUtil.getConn();
+
+        List<Item> items = null;
+        try {
+            items = queryRunner.query(conn,sql.toString(),new BeanListHandler<Item>(Item.class),item.getShop_id());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return items;
+    }
 }

@@ -121,30 +121,30 @@
                     style="width: 100%"
             >
                 <el-table-column
-                        prop="goods_icon"
+                        prop="item_photouri"
                         label="商品预览"
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="goods_name"
+                        prop="item_name"
                         label="商品名"
                         sortable
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="goods_id"
+                        prop="item_id"
                         label="商品ID"
                         sortable
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="goods_explanation"
-                        label="商品描述"
+                        prop="item_type"
+                        label="商品类型"
                         sortable
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="goods_stock"
+                        prop="item_"
                         label="库存"
                         sortable>
                 </el-table-column>
@@ -220,7 +220,7 @@
             getLoginInfo: function (a) {
                 a.userData.shop_id='0';
                 a.userData.nick='BlockDusty';
-                postRequest("/order?method=getOrders",{
+                postRequest("/selling?method=getItems",{
                     shop_id:a.userData.shop_id,
                 }).then(resp => {
                     a.tableData=[];
