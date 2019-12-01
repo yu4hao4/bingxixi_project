@@ -75,7 +75,7 @@
                             <i class="el-icon-s-goods"></i>
                             <span>商品</span>
                         </template>
-                        <el-menu-item index="1-1">
+                        <el-menu-item index="1-1" @click="location('selling.html')">
                             <i class="el-icon-shopping-bag-1"></i>
                             <span slot="title">正在售卖</span>
                         </el-menu-item>
@@ -145,8 +145,9 @@
                         prop="item_amount"
                         label="库存">
                 </el-table-column>
-                <el-table-column>
+                <el-table-column width="400">
                     <template slot-scope="scope">
+                        <el-button class="el-button--warning" @click="modifyItemAmount(scope.row)">修改库存</el-button>
                         <el-button class="el-button--success" @click="modifyInfos(scope.row)">修改信息</el-button>
                         <el-button class="el-button--danger" @click="discountinue(scope.row)">下架商品</el-button>
                     </template>
@@ -168,18 +169,26 @@
         </el-col>
     </el-row>
     <el-dialog title="修改商品信息" :visible.sync="visible">
-        <el-form :model="dialogData">
-            <el-form-item label="商品名" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.item_name" autocomplete="off"></el-input>
+        <el-form :v-model="dialogData">
+            <el-form-item label="商品名">
+                <el-input v-model="dialogData.item_name" @input="flush()"></el-input>
             </el-form-item>
-            <el-form-item label="商品图片" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.item_photouri" autocomplete="off"></el-input>
+            <el-form-item label="商品图片">
+                <el-upload
+                        class="avatar-uploader"
+                        action="/uploadImage"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="dialogData.item_photouri" :src="dialogData.item_photouri" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
             </el-form-item>
-            <el-form-item label="商品类型" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.item_type" autocomplete="off"></el-input>
+            <el-form-item label="商品类型">
+                <el-input v-model="dialogData.item_type" @input="flush()"></el-input>
             </el-form-item>
-            <el-form-item label="库存余量" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.item_amount" autocomplete="off"></el-input>
+            <el-form-item label="库存余量">
+                <el-input v-model="dialogData.item_amount" @input="flush()"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -188,31 +197,23 @@
         </div>
     </el-dialog>
 
-    <el-dialog title="发货信息" :visible.sync="visible1">
-        <el-form :model="dialogData">
-            <el-form-item label="订单编号" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.order_id" autocomplete="off" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="下单日期" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.date" autocomplete="off" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="目的地" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.destination" autocomplete="off" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="始发地" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.original" autocomplete="off" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="运单号" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.waybill_id" autocomplete="off" disabled></el-input>
-                <!--                <el-date-picker type="datetime" v-model="dialogData.send_date" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%;"></el-date-picker>-->
-            </el-form-item>
-            <el-form-item label="发货日期" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.send_date" autocomplete="off" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="收货日期" :label-width="formLabelWidth">
-                <el-input v-model="dialogData.get_date" autocomplete="off" disabled></el-input>
+    <el-dialog title="修改库存信息" :visible.sync="visible3">
+        <el-form :v-model="dialogData">
+            <el-form-item label="库存余量">
+                <el-input v-model="dialogData.item_amount" @input="flush()"></el-input>
             </el-form-item>
         </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="visible3 = false">取 消</el-button>
+            <el-button type="primary" @click="updateItem()">确 定</el-button>
+        </div>
+    </el-dialog>
+
+    <el-dialog title="是否下架商品" :visible.sync="visible1">
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="visible1 = false">取 消</el-button>
+            <el-button type="primary" @click="downshelfItem()">确 定</el-button>
+        </div>
     </el-dialog>
 </div>
 </body>
@@ -236,13 +237,18 @@
                 },
                 visible: false,
                 visible1: false,
+                visible3: false,
                 currentPage: 1,
                 tableData: [],
-                dialogData:[],
+                dialogData:{
+                },
             }
         },
         //js的方法
         methods:{
+            flush: function() {
+                this.$forceUpdate();
+            },
             location: function(url) {
                 location.href=url;
             },
@@ -272,6 +278,7 @@
                 })
             },
             modifyInfos: function(row) {
+                _this.dialogData={};
                 _this.dialogData.item_id = row.item_id;
                 _this.dialogData.shop_id = row.shop_id;
                 _this.dialogData.item_photouri = row.item_photouri;
@@ -280,14 +287,57 @@
                 _this.dialogData.item_amount = row.item_amount;
                 _this.visible=true;
             },
+            modifyItemAmount: function(row) {
+                _this.dialogData={};
+                _this.dialogData.item_id = row.item_id;
+                _this.dialogData.shop_id = row.shop_id;
+                _this.dialogData.item_amount = row.item_amount;
+                _this.visible3=true;
+            },
             updateItem: function () {
                 postRequest("/selling?method=updateItem",_this.dialogData).then(resp => {
                     if(resp.data.data === true) {
-                        this.$message.success("商品信息已上传成功,等待管理员审核");
+                        this.$message.success("商品信息已上传成功");
                         _this.dialogData=[];
-                        _this.visable=false;
+                        _this.visible=false;
+                        _this.visible3=false;
+                        _this.handleSearch();
                     }else {
                         this.$message.error("商品信息上传失败,请重试");
+                    }
+                });
+            },
+            handleAvatarSuccess: function(res, file) {
+                this.dialogData.item_photouri = URL.createObjectURL(file.raw);
+            },
+            beforeAvatarUpload: function(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isPNG = file.type === 'image/png';
+                const isLt2M = file.size / 1024 / 1024 < 5;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 5MB!');
+                }
+                return (isJPG || isPNG) && isLt2M;
+            },
+            discountinue: function(row) {
+                _this.dialogData={};
+                _this.dialogData.item_id = row.item_id;
+                _this.dialogData.shop_id = row.shop_id;
+                _this.visible1=true;
+            },
+            downshelfItem: function () {
+                postRequest("/selling?method=downshelfItem",_this.dialogData).then(resp => {
+                    if(resp.data.data === true) {
+                        this.$message.success("商品已下架");
+                        _this.dialogData={};
+                        _this.visible1=false;
+                        _this.handleSearch();
+                    }else {
+                        this.$message.error("未知原因,商品下架失败,请重试");
                     }
                 });
             }
@@ -301,6 +351,29 @@
 <style scope>
     #nick{
         float: right;
+    }
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
     }
 </style>
 </html>

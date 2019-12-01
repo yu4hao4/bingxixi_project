@@ -52,4 +52,11 @@ import java.util.List;
      * @return
      */
     Integer updateItemInfo(Item item);
+
+    /**
+     * 下架商品
+     * @param item
+     * @return
+     */
+    Integer downshelfItem(Item item);
 }

@@ -5,6 +5,7 @@ import entity.Item;
 import service.MerchantService;
 import utils.BaseServlet;
 import utils.JSONutil;
+import utils.ParamsUtil;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,13 +42,46 @@ public class SellingController extends BaseServlet {
         }
     }
 
+    /**
+     * 修改商品信息的方法
+     * @param request
+     * @param response
+     */
     public void updateItem(HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
 
-        try {
-            JSONObject param = JSONutil.getJSONAsInputStream(request.getInputStream());
+        boolean bool = false;
+        try{
+            ParamsUtil paramsUtil = new ParamsUtil(request);
+            Item item = paramsUtil.postGetParams(Item.class);
+            System.out.println(item.getItem_amount());
+            if(item != null) {
+                bool = merchantService.changeItemInfo(item);
+            }
+            response.getWriter().write(JSONutil.getJSON(bool).toString());
         }catch (IOException e) {
-            e.printStackTrace();
+
+        }
+    }
+
+    /**
+     * 用于下架商品
+     * @param request
+     * @param response
+     */
+    public void downshelfItem(HttpServletRequest request, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+
+        boolean bool = false;
+        try{
+            ParamsUtil paramsUtil = new ParamsUtil(request);
+            Item item = paramsUtil.postGetParams(Item.class);
+            if(item != null) {
+                bool = merchantService.downshelfItem(item);
+            }
+            response.getWriter().write(JSONutil.getJSON(bool).toString());
+        }catch (IOException e) {
+
         }
     }
 }

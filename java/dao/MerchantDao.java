@@ -214,8 +214,7 @@ public class MerchantDao implements MerchantDaoImpl {
     @Override
     public Integer updateItemInfo(Item item) {
         StringBuffer sql = new StringBuffer("update item set ");
-        List<String> list = new ArrayList<String>();
-
+        List<Object> list = new ArrayList<Object>();
         //用于标志是否需要重新审核的
         boolean bool = false;
 
@@ -226,7 +225,7 @@ public class MerchantDao implements MerchantDaoImpl {
         }
         if(item.getItem_photouri() != null && !item.getItem_photouri().isEmpty()) {
             bool = true;
-            sql.append("item_photourl=? ,");
+            sql.append("item_photouri=? ,");
             list.add(item.getItem_photouri());
         }
         if(item.getItem_type() != null && !item.getItem_type().isEmpty()) {
@@ -237,7 +236,7 @@ public class MerchantDao implements MerchantDaoImpl {
 
         if(item.getItem_amount() != null) {
             sql.append("item_amount=? ,");
-            list.add(item.getItem_amount().toString());
+            list.add(item.getItem_amount());
         }
 
         if(bool) {
@@ -246,13 +245,22 @@ public class MerchantDao implements MerchantDaoImpl {
 
         sql.delete(sql.lastIndexOf(","),sql.length());
         sql.append(" where item_id=? and shop_id=?");
-
+        list.add(item.getItem_id());
+        list.add(item.getShop_id());
         QueryRunner queryRunner = new QueryRunner();
         Connection conn = JDBCUtil.getConn();
+
+        System.out.println(sql);
+        for (Object o:
+             list.toArray()) {
+            System.out.print(o + "   ");
+        }
+        System.out.println();
+
         int count = 0;
-        if(list.size() != 0) {
+        if(list.size() > 2) {
             try {
-                count = queryRunner.update(conn,sql.toString(),list.toArray(),item.getItem_id(),item.getShop_id());
+                count = queryRunner.update(conn,sql.toString(),list.toArray());
             } catch (SQLException e) {
                 e.printStackTrace();
             }finally {
@@ -262,6 +270,35 @@ public class MerchantDao implements MerchantDaoImpl {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * 下架商品
+     * @param item
+     * @return
+     */
+    @Override
+    public Integer downshelfItem(Item item) {
+        String sql = "update item set item_statu='已下架' where item_id=? and shop_id=?";
+
+        Connection conn = JDBCUtil.getConn();
+        QueryRunner queryRunner = new QueryRunner();
+
+        Integer count = 0;
+        try {
+            count = queryRunner.update(conn,sql,item.getItem_id(),item.getShop_id());
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }

@@ -111,4 +111,17 @@ public class MerchantService implements MerchantServiceImpl {
         }
         return merchantDao.updateItemInfo(item)>0?true:false;
     }
+
+    /**
+     * 下架商品
+     * @param item
+     * @return
+     */
+    @Override
+    public Boolean downshelfItem(Item item) {
+        if(item == null || item.getShop_id() == null || item.getItem_id() == null) {
+            return false;
+        }
+        return merchantDao.downshelfItem(item)>0?true:false;
+    }
 }

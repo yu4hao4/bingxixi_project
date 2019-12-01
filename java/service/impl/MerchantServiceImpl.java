@@ -52,4 +52,11 @@ public interface MerchantServiceImpl {
      * @return
      */
     Boolean changeItemInfo(Item item);
+
+    /**
+     * 下架商品
+     * @param item
+     * @return
+     */
+    Boolean downshelfItem(Item item);
 }
