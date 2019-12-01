@@ -40,4 +40,14 @@ public class SellingController extends BaseServlet {
             e.printStackTrace();
         }
     }
+
+    public void updateItem(HttpServletRequest request, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+
+        try {
+            JSONObject param = JSONutil.getJSONAsInputStream(request.getInputStream());
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -45,4 +45,11 @@ import java.util.List;
      * @return
      */
     List<Item> getItemInfos(Item item);
+
+    /**
+     * 修改商品信息的方法
+     * @param item
+     * @return
+     */
+    Integer updateItemInfo(Item item);
 }

@@ -205,4 +205,66 @@ public class MerchantDao implements MerchantDaoImpl {
 
         return items;
     }
+
+    /**
+     * 修改商品信息的方法
+     * @param item
+     * @return
+     */
+    @Override
+    public Integer updateItemInfo(Item item) {
+        StringBuffer sql = new StringBuffer("update item set ");
+        List<String> list = new ArrayList<String>();
+
+        //用于标志是否需要重新审核的
+        boolean bool = false;
+
+        if(item.getItem_name() != null && !item.getItem_name().isEmpty()) {
+            bool = true;
+            sql.append("item_name=? ,");
+            list.add(item.getItem_name());
+        }
+        if(item.getItem_photouri() != null && !item.getItem_photouri().isEmpty()) {
+            bool = true;
+            sql.append("item_photourl=? ,");
+            list.add(item.getItem_photouri());
+        }
+        if(item.getItem_type() != null && !item.getItem_type().isEmpty()) {
+            bool = true;
+            sql.append("item_type=? ,");
+            list.add(item.getItem_type());
+        }
+
+        if(item.getItem_amount() != null) {
+            sql.append("item_amount=? ,");
+            list.add(item.getItem_amount().toString());
+        }
+
+        if(bool) {
+            sql.append("item_statu='未审核' ,");
+        }
+
+        sql.delete(sql.lastIndexOf(","),sql.length());
+        sql.append(" where item_id=? and shop_id=?");
+
+        QueryRunner queryRunner = new QueryRunner();
+        Connection conn = JDBCUtil.getConn();
+        int count = 0;
+        if(list.size() != 0) {
+            try {
+                count = queryRunner.update(conn,sql.toString(),list.toArray(),item.getItem_id(),item.getShop_id());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }finally {
+                if(conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return count;
+    }
 }

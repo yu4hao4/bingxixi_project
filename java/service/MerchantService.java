@@ -98,4 +98,17 @@ public class MerchantService implements MerchantServiceImpl {
             return new ArrayList<Item>();
         }
     }
+
+    /**
+     * 修改货物信息的方法
+     * @param item
+     * @return
+     */
+    @Override
+    public Boolean changeItemInfo(Item item) {
+        if(item == null || item.getShop_id() == null || item.getItem_id() == null) {
+            return false;
+        }
+        return merchantDao.updateItemInfo(item)>0?true:false;
+    }
 }

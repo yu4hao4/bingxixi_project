@@ -45,4 +45,11 @@ public interface MerchantServiceImpl {
      * @return
      */
     List<Item> getItemInfos(Item item);
+
+    /**
+     * 修改货物信息的方法
+     * @param item
+     * @return
+     */
+    Boolean changeItemInfo(Item item);
 }

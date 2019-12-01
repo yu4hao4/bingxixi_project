@@ -172,19 +172,19 @@
             <el-form-item label="商品名" :label-width="formLabelWidth">
                 <el-input v-model="dialogData.item_name" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="订单创建日期" :label-width="formLabelWidth">
+            <el-form-item label="商品图片" :label-width="formLabelWidth">
                 <el-input v-model="dialogData.item_photouri" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="目的地" :label-width="formLabelWidth">
+            <el-form-item label="商品类型" :label-width="formLabelWidth">
                 <el-input v-model="dialogData.item_type" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="始发地" :label-width="formLabelWidth">
+            <el-form-item label="库存余量" :label-width="formLabelWidth">
                 <el-input v-model="dialogData.item_amount" autocomplete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="visible = false">取 消</el-button>
-            <el-button type="primary" @click="sendOrderInfos()">确 定</el-button>
+            <el-button type="primary" @click="updateItem()">确 定</el-button>
         </div>
     </el-dialog>
 
@@ -268,15 +268,28 @@
                     shop_id:a.userData.shop_id,
                 }).then(resp => {
                     a.tableData=[];
-                a.tableData=resp.data.data;
-            })
+                    a.tableData=resp.data.data;
+                })
             },
             modifyInfos: function(row) {
+                _this.dialogData.item_id = row.item_id;
+                _this.dialogData.shop_id = row.shop_id;
                 _this.dialogData.item_photouri = row.item_photouri;
                 _this.dialogData.item_name = row.item_name;
                 _this.dialogData.item_type = row.item_type;
                 _this.dialogData.item_amount = row.item_amount;
                 _this.visible=true;
+            },
+            updateItem: function () {
+                postRequest("/selling?method=updateItem",_this.dialogData).then(resp => {
+                    if(resp.data.data === true) {
+                        this.$message.success("商品信息已上传成功,等待管理员审核");
+                        _this.dialogData=[];
+                        _this.visable=false;
+                    }else {
+                        this.$message.error("商品信息上传失败,请重试");
+                    }
+                });
             }
         },
         //dom元素渲染时调用的方法
