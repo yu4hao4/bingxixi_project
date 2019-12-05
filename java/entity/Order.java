@@ -54,9 +54,21 @@ public class Order implements Serializable {
      * 是否发货
      */
     private String is_Send;
+    /**
+     * 用户电话号码
+     */
+    private Integer user_phone;
 
     public Order() {
 
+    }
+
+    public Integer getUser_phone() {
+        return user_phone;
+    }
+
+    public void setUser_phone(Integer user_phone) {
+        this.user_phone = user_phone;
     }
 
     public Integer getOrder_id() {
