@@ -365,15 +365,17 @@ public class MerchantDao implements MerchantDaoInf {
      * @param
      * @return
      */
+    @Override
     public Integer changeShopInfo(Shop shop){
-        String sql = "update shop ";
+        String sql = "update shop set shop_nick=?," +
+                "shop_photouri=?,shop_location=? where shop_id=?";
+
         Connection conn = JDBCUtil.getConn();
         QueryRunner queryRunner = new QueryRunner();
+
         Integer count = 0;
-
         try {
-            count = queryRunner.update(conn,sql,shop.getShop_nick(),shop.getShop_photouri(),shop.getShop_account(),shop.getShop_location());
-
+            count = queryRunner.update(conn,sql,shop.getShop_nick(),shop.getShop_photouri(),shop.getShop_location(),shop.getShop_id());
         }catch(SQLException e) {
             e.printStackTrace();
         }finally {

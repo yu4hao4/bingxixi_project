@@ -131,6 +131,7 @@ public class MerchantService implements MerchantServiceInf {
      * @param item
      * @return
      */
+    @Override
    public Boolean insertItem(Item item) {
 
        if(item == null || item.getShop_id() == null) {
@@ -150,7 +151,10 @@ public class MerchantService implements MerchantServiceInf {
      */
     @Override
     public Boolean uppershelfItem(Item item) {
-        return false;
+        if(item == null || item.getItem_id() == null || item.getShop_id() == null) {
+            return false;
+        }
+        return merchantDao.uppershelfItem(item)>0?true:false;
     }
 
     /**
@@ -160,8 +164,9 @@ public class MerchantService implements MerchantServiceInf {
      */
     @Override
     public Boolean changeShopInfo(Shop shop) {
-        return false;
+        if(shop == null || shop.getShop_id() == null) {
+            return false;
+        }
+        return merchantDao.changeShopInfo(shop)>0?true:false;
     }
-
-
 }
