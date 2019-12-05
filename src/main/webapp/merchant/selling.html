@@ -144,6 +144,16 @@
                     style="width: 100%"
             >
                 <el-table-column
+                        prop="item_id"
+                        label="商品ID"
+                        sortable>
+                </el-table-column>
+                <el-table-column
+                        prop="item_statu"
+                        label="审核状态"
+                        sortable>
+                </el-table-column>
+                <el-table-column
                         prop="item_photouri"
                         label="商品预览"
                         width="200">
@@ -153,11 +163,6 @@
                         label="商品名"
                         sortable
                         width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="item_id"
-                        label="商品ID"
-                        sortable>
                 </el-table-column>
                 <el-table-column
                         prop="item_type"

@@ -36,6 +36,7 @@ public class SellingController extends BaseServlet {
             Item item = new Item();
             item.setShop_id(Integer.parseInt(shop_id));
             item.setItem_name(item_name);
+            item.setItem_shelves("已上架");
             response.getWriter().write(JSONutil.getJSON(merchantService.getItemInfos(item)).toString());
         }catch (IOException e) {
             e.printStackTrace();

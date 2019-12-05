@@ -170,13 +170,13 @@ public class MerchantDao implements MerchantDaoInf {
      }
 
     /**
-     * 获得selling商品信息的方法
+     * 获得商品信息的方法
      * @param item
      * @return
      */
     @Override
     public List<Item> getItemInfos(Item item) {
-        StringBuffer sql = new StringBuffer("select * from item where shop_id=?");
+        StringBuffer sql = new StringBuffer("select * from item where shop_id=? and item.item_shelves=?");
         if(item.getItem_name() != null && !item.getItem_name().isEmpty()) {
             sql.append(" and item_name like '%");
             sql.append(item.getItem_name());
@@ -188,7 +188,7 @@ public class MerchantDao implements MerchantDaoInf {
 
         List<Item> items = null;
         try {
-            items = queryRunner.query(conn,sql.toString(),new BeanListHandler<Item>(Item.class),item.getShop_id());
+            items = queryRunner.query(conn,sql.toString(),new BeanListHandler<Item>(Item.class),item.getShop_id(),item.getItem_shelves());
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -207,7 +207,7 @@ public class MerchantDao implements MerchantDaoInf {
 
 
     /**
-     * 修改商品信息的方法
+//     * 修改商品信息的方法
      * @param item
      * @return
      */
@@ -283,7 +283,7 @@ public class MerchantDao implements MerchantDaoInf {
      */
     @Override
     public Integer downshelfItem(Item item) {
-        String sql = "update item set item_statu='已下架' where item_id=? and shop_id=?";
+        String sql = "update item set item_shelves='已下架' where item_id=? and shop_id=?";
 
         Connection conn = JDBCUtil.getConn();
         QueryRunner queryRunner = new QueryRunner();
@@ -309,15 +309,16 @@ public class MerchantDao implements MerchantDaoInf {
      * @param item
      * @return
      */
+    @Override
     public Integer insertItem(Item item){
         String sql = "insert into item (item_id,shop_id,item_name,item_type,item_price," +
-                "item_shelves,item_photouri,item_statu,item_amout,item) values (?,?,?,?,?,?,?,?,?)";
+                "item_shelves,item_photouri,item_shelves,item_amout,item) values (?,?,?,?,?,?,?,?,?)";
         Connection conn = JDBCUtil.getConn();
         QueryRunner queryRunner = new QueryRunner();
         Integer count = 0;
         try {
             count = queryRunner.update(conn, sql, item.getItem_id(), item.getShop_id(), item.getItem_name(), item.getItem_type(),
-                    item.getItem_price(), item.getItem_shelves(), item.getItem_photouri(), item.getItem_statu(), item.getItem_amount());
+                    item.getItem_price(), item.getItem_shelves(), item.getItem_photouri(), "未上架", item.getItem_amount());
         }catch(SQLException e){
             e.printStackTrace();
         }finally {
@@ -338,7 +339,7 @@ public class MerchantDao implements MerchantDaoInf {
      */
     @Override
     public Integer uppershelfItem(Item item) {
-        String sql = "update item set item_statu='已上架' where item_id=? and shop_id=?";
+        String sql = "update item set item_shelves='已上架' where item_id=? and shop_id=?";
 
         Connection conn = JDBCUtil.getConn();
         QueryRunner queryRunner = new QueryRunner();
