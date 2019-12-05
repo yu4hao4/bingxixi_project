@@ -1,7 +1,8 @@
-package dao.impl;
+package dao.inf;
 
 import entity.Item;
 import entity.Order;
+import entity.Shop;
 import entity.Waybill;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @Author BlockDusty
  * @Date 2019/11/27 18:58
  */
-    public interface MerchantDaoImpl {
+    public interface MerchantDaoInf {
     /**
      * 用于获取订单信息的方法
      * @param order
@@ -59,4 +60,26 @@ import java.util.List;
      * @return
      */
     Integer downshelfItem(Item item);
+
+
+    /**
+     * 添加预售商品
+     * @param item
+     * @return
+     */
+    Integer insertItem(Item item);
+
+    /**
+     * 上架商品
+     * @param item
+     * @return
+     */
+    Integer uppershelfItem(Item item);
+
+    /**
+     * 修改商家信息
+     * @param shop
+     * @return
+     */
+    Integer changeShopInfo(Shop shop);
 }

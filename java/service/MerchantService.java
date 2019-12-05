@@ -1,22 +1,24 @@
 package service;
 
 import dao.MerchantDao;
-import dao.impl.MerchantDaoImpl;
+import dao.inf.MerchantDaoInf;
 import entity.Item;
 import entity.Order;
+import entity.Shop;
 import entity.Waybill;
-import service.impl.MerchantServiceImpl;
+import service.inf.MerchantServiceInf;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author BlockDusty
  * @date 2019/11/27 13:56
  */
-public class MerchantService implements MerchantServiceImpl {
+public class MerchantService implements MerchantServiceInf {
 
-    private MerchantDaoImpl merchantDao;
+    private MerchantDaoInf merchantDao;
 
     public MerchantService() {
         this.merchantDao = new MerchantDao();
@@ -124,4 +126,42 @@ public class MerchantService implements MerchantServiceImpl {
         }
         return merchantDao.downshelfItem(item)>0?true:false;
     }
+    /**
+     * 添加预售商品
+     * @param item
+     * @return
+     */
+   public Boolean insertItem(Item item) {
+
+       if(item == null || item.getShop_id() == null) {
+           return false;
+       }
+       Integer item_id = new Random(System.currentTimeMillis()).nextInt(999999999);
+       item.setItem_id(item_id);
+       System.out.println(item_id);
+//       return false;
+       return merchantDao.insertItem(item)>0?true:false;
+   }
+
+    /**
+     * 上架商品
+     * @param item
+     * @return
+     */
+    @Override
+    public Boolean uppershelfItem(Item item) {
+        return false;
+    }
+
+    /**
+     * 修改商家信息
+     * @param  shop
+     * @return
+     */
+    @Override
+    public Boolean changeShopInfo(Shop shop) {
+        return false;
+    }
+
+
 }

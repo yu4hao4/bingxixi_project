@@ -5,6 +5,29 @@
     <title>商家管理</title>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <style>
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 150px;
+            height: 150px;
+            line-height: 150px;
+            text-align: center;
+        }
+        .avatar {
+            width: 150px;
+            height: 150px;
+            display: block;
+        }
         .el-header, .el-footer {
             background-color: #B3C0D1;
             color: #333;
@@ -58,7 +81,7 @@
                 </el-menu-item>
                 <el-menu-item index="4">
                     <i class="el-icon-setting"></i>
-                    <span slot="title">修改信息</span>
+                    <span slot="title" @click="showChangeInfo()">修改信息</span>
                 </el-menu-item>
             </el-submenu>
         </el-menu>
@@ -82,7 +105,7 @@
                             <i class="el-icon-sell"></i>
                             <span slot="title">预热</span>
                         </el-menu-item>
-                        <el-menu-item index="1-3" @click="location('sold-out.html')">
+                        <el-menu-item index="1-3" @click="location('sold_out.html')">
                             <i class="el-icon-sold-out"></i>
                             <span slot="title">已下架</span>
                         </el-menu-item>
@@ -113,6 +136,13 @@
                         搜索
                     </el-button>
                 </el-col>
+                <el-col :span="2" :offset="16">
+                    <el-button @click="addItem()">
+                        <i class="el-icon-plus"></i>
+                        添加商品
+                    </el-button>
+                </el-col>
+
             </el-row>
             <el-table
                     :data="tableData"
@@ -142,15 +172,16 @@
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="goods_putaway_time"
-                        label="上架时间"
-                        sortable>
-                </el-table-column>
-                <el-table-column
                         prop="goods_stock"
                         label="库存"
                         sortable>
                 </el-table-column>
+                <el-table-colum width="400">
+                <template slot-scope="scope">
+                    <el-button class="el-button--success" @click="modifyInfos(scope.row)">修改信息</el-button>
+                    <el-button class="el-button--danger" @click="discountinue(scope.row)">上架商品</el-button>
+                </template>
+              </el-table-colum>
             </el-table>
             <el-row>
                 <el-col :span="8" :offset="6">
@@ -167,6 +198,68 @@
             </el-row>
         </el-col>
     </el-row>
+    <el-dialog title="修改商家信息" :visible.sync="changeInfo">
+        <el-form ref="form" :model="dialogData1" label-width="80px">
+            <el-form-item label="更改头像">
+                <el-upload
+                        class="avatar-uploader"
+                        action="/uploadImage"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="dialogData.item_photouri" :src="dialogData.shop_photouri" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
+            <el-form-item label="店铺昵称">
+                <el-input v-model="dialogData.shop_nick"></el-input>
+            </el-form-item>
+            <el-form-item label="店铺ID">
+                <el-input v-model="dialogData.shop_id"></el-input>
+            </el-form-item>
+            <el-form-item label="店铺地址">
+                <el-input v-model="dialogData.shop_location"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">确认修改</el-button>
+                <el-button @click="changeInfo=false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+    <el-dialog :title="title" :visible.sync="visible">
+        <el-form :v-model="dialogData">
+            <el-form-item label="商品名">
+                <el-input v-model="dialogData.item_name" @input="flush()"></el-input>
+            </el-form-item>
+            <el-form-item label="商品图片">
+                <el-upload
+                        class="avatar-uploader"
+                        action="/uploadImage"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="dialogData.item_photouri" :src="dialogData.item_photouri" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
+            <el-form-item label="商品类型">
+                <el-input v-model="dialogData.item_type" @input="flush()"></el-input>
+            </el-form-item>
+            <el-form-item label="库存">
+                <el-input v-model="dialogData.item_amount" @input="flush()"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="visible = false">取 消</el-button>
+            <el-button type="primary" @click="updateItem()">确 定</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog title="是否上架商品" :visible.sync="visible1">
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="visible1 = false">取 消</el-button>
+            <el-button type="primary" @click="uppershelfItem()">确 定</el-button>
+        </div>
+    </el-dialog>
 </div>
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -197,10 +290,22 @@
                     {
 
                     }],
+                dialogData:{},
+                visible:false,
+                visible1:false,
+                title:"",
+                changeInfo:false,
+                dialogData1:{},
             }
         },
         //js的方法
         methods:{
+            addItem:function () {
+                _this.title="添加商品";
+                _this.visible=true;
+                _this.dialogData={};
+                _this.dialogData.shop_id=_this.userData.shop_id;
+            },
             location: function(url) {
                 location.href=url;
             },
@@ -209,6 +314,12 @@
             },
             handleCurrentChange: function(val) {
                 console.log('当前页: ${val}');
+            },
+            showChangeInfo: function () {
+                _this.changeInfo=true;
+            },
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
             },
             handleSearch: function() {
                 postRequest("/order?method=getOrders",{
@@ -230,6 +341,64 @@
                 a.tableData=resp.data.data;
             })
             },
+            /*修改商品信息*/
+            modifyInfos: function(row) {
+                _this.dialogData={};
+                _this.dialogData.item_id = row.item_id;
+                _this.dialogData.shop_id = row.shop_id;
+                _this.dialogData.item_photouri = row.item_photouri;
+                _this.dialogData.item_name = row.item_name;
+                _this.dialogData.item_type = row.item_type;
+                _this.dialogData.item_amount = row.item_amount;
+                _this.visible=true;
+            },
+            updateItem: function () {
+                postRequest("/sell?method=insertItem",_this.dialogData).then(resp => {
+                    if(resp.data.data === true) {
+                        this.$message.success("商品信息已上传成功");
+                        _this.dialogData=[];
+                        _this.visible=false;
+                        _this.visible3=false;
+                        _this.handleSearch();
+                    }else {
+                        this.$message.error("商品信息上传失败,请重试");
+                    }
+                });
+            },
+            handleAvatarSuccess: function(res, file) {
+                this.dialogData.item_photouri = URL.createObjectURL(file.raw);
+            },
+            beforeAvatarUpload: function(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isPNG = file.type === 'image/png';
+                const isLt2M = file.size / 1024 / 1024 < 5;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 5MB!');
+                }
+                return (isJPG || isPNG) && isLt2M;
+            },
+            discountinue: function(row) {
+                _this.dialogData={};
+                _this.dialogData.item_id = row.item_id;
+                _this.dialogData.shop_id = row.shop_id;
+                _this.visible1=true;
+            },
+            uppershelfItem:function () {
+                postRequest("/sell?method=uppershelfItem",this.dialogData).then(resp => {
+                    if(resp.date.date == true) {
+                        this.$message.success("商品已上架");
+                        _this.dialogData={};
+                        _this.visible=false;
+                        _this.handleSearch();
+                    }else{
+                        this.$message.error("未知原因，商品上架失败，请重试！");
+                    }
+                })
+            }
         },
         //dom元素渲染时调用的方法
         mounted:function() {
@@ -240,6 +409,29 @@
 <style scope>
     #nick{
         float: right;
+    }
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
     }
 </style>
 </html>

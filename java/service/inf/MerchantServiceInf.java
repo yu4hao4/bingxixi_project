@@ -1,7 +1,8 @@
-package service.impl;
+package service.inf;
 
 import entity.Item;
 import entity.Order;
+import entity.Shop;
 import entity.Waybill;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @Author BlockDusty
  * @Date 2019/11/27 19:01
  */
-public interface MerchantServiceImpl {
+public interface MerchantServiceInf {
     /**
      * 获得所有的订单信息
      * @param order
@@ -59,4 +60,25 @@ public interface MerchantServiceImpl {
      * @return
      */
     Boolean downshelfItem(Item item);
+
+    /**
+     * 添加预售商品
+     * @param item
+     * @return
+     */
+    Boolean insertItem(Item item);
+
+    /**
+     * 上架商品
+     * @param item
+     * @return
+     */
+    Boolean uppershelfItem(Item item);
+
+    /**
+     * 修改商家信息
+     * @param shop
+     * @return
+     */
+    Boolean changeShopInfo(Shop shop);
 }

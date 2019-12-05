@@ -1,17 +1,15 @@
 package dao;
 
-import com.sun.tools.corba.se.idl.constExpr.Or;
-import dao.impl.MerchantDaoImpl;
+import dao.inf.MerchantDaoInf;
 import entity.Item;
 import entity.Order;
+import entity.Shop;
 import entity.Waybill;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import utils.JDBCUtil;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ import java.util.List;
  * @author BlockDusty
  * @date 2019/11/27 13:58
  */
-public class MerchantDao implements MerchantDaoImpl {
+public class MerchantDao implements MerchantDaoInf {
     /**
      * 用于获取订单信息的方法
      * @param order
@@ -172,7 +170,7 @@ public class MerchantDao implements MerchantDaoImpl {
      }
 
     /**
-     * 获得商品信息的方法
+     * 获得selling商品信息的方法
      * @param item
      * @return
      */
@@ -205,6 +203,8 @@ public class MerchantDao implements MerchantDaoImpl {
 
         return items;
     }
+
+
 
     /**
      * 修改商品信息的方法
@@ -298,6 +298,89 @@ public class MerchantDao implements MerchantDaoImpl {
                 try {
                     conn.close();
                 } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return count;
+    }
+    /**
+     * 添加预售商品
+     * @param item
+     * @return
+     */
+    public Integer insertItem(Item item){
+        String sql = "insert into item (item_id,shop_id,item_name,item_type,item_price," +
+                "item_shelves,item_photouri,item_statu,item_amout,item) values (?,?,?,?,?,?,?,?,?)";
+        Connection conn = JDBCUtil.getConn();
+        QueryRunner queryRunner = new QueryRunner();
+        Integer count = 0;
+        try {
+            count = queryRunner.update(conn, sql, item.getItem_id(), item.getShop_id(), item.getItem_name(), item.getItem_type(),
+                    item.getItem_price(), item.getItem_shelves(), item.getItem_photouri(), item.getItem_statu(), item.getItem_amount());
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally {
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return count;
+    }
+    /**
+     * 上架商品
+     * @param item
+     * @return
+     */
+    @Override
+    public Integer uppershelfItem(Item item) {
+        String sql = "update item set item_statu='已上架' where item_id=? and shop_id=?";
+
+        Connection conn = JDBCUtil.getConn();
+        QueryRunner queryRunner = new QueryRunner();
+
+        Integer count = 0;
+        try {
+            count = queryRunner.update(conn,sql,item.getItem_id(),item.getShop_id());
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     *修改商家信息
+     * @param
+     * @return
+     */
+    public Integer changeShopInfo(Shop shop){
+        String sql = "update shop ";
+        Connection conn = JDBCUtil.getConn();
+        QueryRunner queryRunner = new QueryRunner();
+        Integer count = 0;
+
+        try {
+            count = queryRunner.update(conn,sql,shop.getShop_nick(),shop.getShop_photouri(),shop.getShop_account(),shop.getShop_location());
+
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }finally {
+            if(conn != null) {
+                try {
+                    conn.close();
+                }catch(SQLException e){
                     e.printStackTrace();
                 }
             }
