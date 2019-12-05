@@ -31,6 +31,7 @@ public class MerchantDao implements MerchantDaoInf {
         List<Order> orders = new ArrayList<Order>();
         StringBuffer sql = new StringBuffer("select orders.order_id as order_id,orders.date as date," +
                 "user_info.user_realname as user_realname,user_info.user_nick as user_nick," +
+                "user_info.user_phone as user_phone," +
                 "item.item_id as item_id,item.item_name as item_name,orders.order_count as order_count," +
                 "orders.order_location as order_location,orders.is_send as is_send " +
                 "from orders,item,user_info " +
