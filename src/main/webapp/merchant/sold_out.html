@@ -142,38 +142,36 @@
                     style="width: 100%"
             >
                 <el-table-column
-                        prop="goods_icon"
-                        label="商品预览"
-                        width="180">
+                        prop="item_id"
+                        label="商品ID"
+                        sortable>
                 </el-table-column>
                 <el-table-column
-                        prop="goods_name"
+                        prop="item_statu"
+                        label="审核状态"
+                        sortable>
+                </el-table-column>
+                <el-table-column
+                        prop="item_photouri"
+                        label="商品预览"
+                        width="200">
+                </el-table-column>
+                <el-table-column
+                        prop="item_name"
                         label="商品名"
                         sortable
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="goods_id"
-                        label="商品ID"
-                        sortable
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="goods_explanation"
-                        label="商品描述"
-                        sortable
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="goods_sold_out_time"
-                        label="下架时间"
+                        prop="item_type"
+                        label="商品类型"
                         sortable>
                 </el-table-column>
                 <el-table-column
-                        prop="goods_stock"
-                        label="库存"
-                        sortable>
+                        prop="item_amount"
+                        label="库存">
                 </el-table-column>
+
                 <el-table-colum width="400">
                     <template slot-scope="scope">
                         <el-button class="el-button--success" @click="modifyInfos(scope.row)">修改信息</el-button>
