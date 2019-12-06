@@ -13,13 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author BlockDusty
- * @date 2019/11/30 15:53
+ * @author moxiaoya
+ * @date 2019/12/03 20:17
  */
-@WebServlet("/selling")
-public class SellingController extends BaseServlet {
+@WebServlet("/sell")
+public class SellController extends BaseServlet{
     MerchantService merchantService = new MerchantService();
-
     /**
      * 获得商品信息
      * @param request
@@ -36,13 +35,12 @@ public class SellingController extends BaseServlet {
             Item item = new Item();
             item.setShop_id(Integer.parseInt(shop_id));
             item.setItem_name(item_name);
-            item.setItem_shelves("已上架");
+            item.setItem_shelves("未上架");
             response.getWriter().write(JSONutil.getJSON(merchantService.getItemInfos(item)).toString());
         }catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     /**
      * 修改商品信息的方法
      * @param request
@@ -64,13 +62,32 @@ public class SellingController extends BaseServlet {
 
         }
     }
-
     /**
-     * 用于下架商品
+     * 用于预售添加商品
      * @param request
      * @param response
      */
-    public void downshelfItem(HttpServletRequest request, HttpServletResponse response) {
+    public void insertItem(HttpServletRequest request, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+
+        boolean bool = false;
+        try{
+            ParamsUtil paramsUtil = new ParamsUtil(request);
+            Item item = paramsUtil.postGetParams(Item.class);
+            if(item != null) {
+                bool = merchantService.insertItem(item);
+            }
+            response.getWriter().write(JSONutil.getJSON(bool).toString());
+        }catch (IOException e) {
+
+        }
+    }
+    /**
+     * 用于上架商品
+     * @param request
+     * @param response
+     */
+    public void Item(HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
 
         boolean bool = false;
@@ -85,4 +102,5 @@ public class SellingController extends BaseServlet {
 
         }
     }
+
 }

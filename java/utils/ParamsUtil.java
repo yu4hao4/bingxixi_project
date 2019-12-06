@@ -2,8 +2,14 @@ package utils;
 
 import com.alibaba.dubbo.common.utils.IOUtils;
 import com.alibaba.fastjson.JSONObject;
+<<<<<<< HEAD
 import com.sun.tools.javac.util.Convert;
 
+=======
+import jdk.internal.org.objectweb.asm.tree.InnerClassNode;
+
+import javax.rmi.ssl.SslRMIClientSocketFactory;
+>>>>>>> 71bb150c3396780b70b2f58948949d8f1f5ea2f5
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -18,6 +24,10 @@ public class ParamsUtil {
         this.getJSONObject(request);
     }
     public  <T> T postGetParams(Class<T> clazz) throws IOException {
+<<<<<<< HEAD
+=======
+        System.out.println(jsonObject);
+>>>>>>> 71bb150c3396780b70b2f58948949d8f1f5ea2f5
         if(jsonObject == null || jsonObject.isEmpty()) {
             return null;
         }
@@ -39,6 +49,7 @@ public class ParamsUtil {
             }
         }
         for (String key:jsonObject.keySet()
+<<<<<<< HEAD
         ) {
             Method m = methodMap.get(key);
             Class<?>[] name = m.getParameterTypes();
@@ -61,6 +72,24 @@ public class ParamsUtil {
             m.setAccessible(true);
             try {
                 m.invoke(t, object);
+=======
+             ) {
+            Method m = methodMap.get(key);
+            m.setAccessible(true);
+            try {
+                Class temp = m.getParameterTypes()[0];
+                String value = jsonObject.getString(key);
+                System.err.println("-------------------------"+value);
+                if(temp == String.class) {
+                    m.invoke(t, value);
+                }else if(temp == Integer.class) {
+                    m.invoke(t, Integer.parseInt(value));
+                }else if(temp == Float.class) {
+                    m.invoke(t, Float.parseFloat(value));
+                }else if(temp == Double.class) {
+                    m.invoke(t, Double.parseDouble(value));
+                }
+>>>>>>> 71bb150c3396780b70b2f58948949d8f1f5ea2f5
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {

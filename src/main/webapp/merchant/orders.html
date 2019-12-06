@@ -82,7 +82,7 @@
                             <i class="el-icon-sell"></i>
                             <span slot="title">预热</span>
                         </el-menu-item>
-                        <el-menu-item index="1-3" @click="location('sold-out.html')">
+                        <el-menu-item index="1-3" @click="location('sold_out.html')">
                             <i class="el-icon-sold-out"></i>
                             <span slot="title">已下架</span>
                         </el-menu-item>
@@ -96,7 +96,6 @@
                         <span slot="title">订单</span>
                     </el-menu-item>
                 </el-menu>
-
             </el-aside>
         </el-col>
         <el-col :span="21">
@@ -145,13 +144,20 @@
                         width="100">
                 </el-table-column>
                 <el-table-column
+                        prop="user_phone"
+                        label="电话号码"
+                        sortable
+                        width="120">
+                </el-table-column>
+                <el-table-column
                         prop="item_name"
                         label="商品名"
                         sortable>
                 </el-table-column>
                 <el-table-column
                         prop="order_count"
-                        label="数量">
+                        label="数量"
+                        width="60">
                 </el-table-column>
                 <el-table-column
                         prop="order_location"
@@ -159,9 +165,11 @@
                 </el-table-column>
                 <el-table-column
                         prop="is_Send"
-                        label="是否发货">
+                        label="是否发货"
+                        width="100">
                 </el-table-column>
-                <el-table-column>
+                <el-table-column
+                width="220">
                     <template slot-scope="scope">
                         <el-button class="el-button--success" @click="showDialog(scope.row)" :disabled="canUse(scope.row)">发货</el-button>
                         <el-button class="el-button--primary" @click="showInfos(scope.row)" :disabled="!canUse(scope.row)">查看详情</el-button>

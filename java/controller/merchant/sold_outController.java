@@ -2,24 +2,22 @@ package controller.merchant;
 
 import com.alibaba.fastjson.JSONObject;
 import entity.Item;
+import entity.Shop;
 import service.MerchantService;
 import utils.BaseServlet;
 import utils.JSONutil;
 import utils.ParamsUtil;
 
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author BlockDusty
- * @date 2019/11/30 15:53
+ * @author moxiaoya
+ * @date 2019/12/04 20:31
  */
-@WebServlet("/selling")
-public class SellingController extends BaseServlet {
+public class sold_outController extends BaseServlet {
     MerchantService merchantService = new MerchantService();
-
     /**
      * 获得商品信息
      * @param request
@@ -36,13 +34,12 @@ public class SellingController extends BaseServlet {
             Item item = new Item();
             item.setShop_id(Integer.parseInt(shop_id));
             item.setItem_name(item_name);
-            item.setItem_shelves("已上架");
+            item.setItem_shelves("已下架");
             response.getWriter().write(JSONutil.getJSON(merchantService.getItemInfos(item)).toString());
         }catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     /**
      * 修改商品信息的方法
      * @param request
@@ -66,11 +63,11 @@ public class SellingController extends BaseServlet {
     }
 
     /**
-     * 用于下架商品
+     * 用于上架商品
      * @param request
      * @param response
      */
-    public void downshelfItem(HttpServletRequest request, HttpServletResponse response) {
+    public void Item(HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
 
         boolean bool = false;
@@ -82,6 +79,24 @@ public class SellingController extends BaseServlet {
             }
             response.getWriter().write(JSONutil.getJSON(bool).toString());
         }catch (IOException e) {
+
+        }
+    }
+    /**
+     * 用于修改商家信息
+     * @param request
+     * @param response
+     */
+    public void changeShopInfo(HttpServletRequest request,HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        boolean bool = false;
+        try{
+            ParamsUtil paramsUtil = new ParamsUtil(request);
+            Shop shop = paramsUtil.postGetParams(Shop.class);
+            if(shop.getShop_id() != null){
+                bool = merchantService.changeShopInfo(shop);
+            }
+        }catch (IOException e){
 
         }
     }
