@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>并夕夕账户注册~~~</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- import Vue before Element -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="../js/utils.js"></script>
+    <div id="app">
+        <el-row :gutter="8">
+        <el-col :span="2" :offset="7">
+            <div style="font-size: large;font-family: 方正粗黑宋简体;color:orangered"> 夕夕网 </div>
+            <div style="font-family: 方正粗黑宋简体;color:orangered">xixi.com</div>
+        </el-col>
+        <el-col :span="2">
+            <div style="font-size: large;font-family: 华文仿宋 ;margin-top: 10px;margin-left: -50px">用户注册</div>
+        </el-col>
+    </el-row>
+        <br>
+
+        <el-row :gutter="8">
+            <el-col :span="2" :offset="8"><div style="margin-top: 5px">用户名:</div></el-col>
+            <el-col :span="7"><div><el-input v-model="username" placeholder="请输入用户名" size="small"></el-input></div></el-col>
+        </el-row>
+        <br>
+
+        <el-row :gutter="8">
+            <el-col :span="2" :offset="8"><div style="margin-top: 5px">密&nbsp;&nbsp;码:</div>
+            </el-col>
+            <el-col :span="7"><div>
+                <el-input placeholder="请输入密码" v-model="password" show-password size="small"></el-input>
+            </div>
+            </el-col>
+        </el-row>
+        <br>
+
+
+        <el-row :gutter="8">
+            <el-col :span="2" :offset="8"><div style="margin-top: 5px">确认密码:</div>
+            </el-col>
+            <el-col :span="7"><div>
+                <el-input placeholder="请确认密码" v-model="relPassword" show-password size="small"></el-input>
+            </div>
+            </el-col>
+        </el-row>
+        <br>
+
+        <el-row :gutter="8">
+            <el-col :span="2" :offset="8"><div style="margin-top: 5px">手机号:</div>
+            </el-col>
+            <el-col :span="7"><div>
+                <el-input placeholder="请输入手机号码" v-model="relPassword" show-password size="small"></el-input>
+            </div>
+            </el-col>
+        </el-row>
+        <br>
+
+        <el-row :gutter="4">
+            <el-col :span="2" :offset="10"><div><el-button type="primary" plain @click="add">注册</el-button></div></el-col>
+            <el-col :span="2"><div> <el-button type="info" plain>取消</el-button></div></el-col>
+        </el-row>
+    </div>
+    <script>
+        var vm = new Vue ({
+            el:'#app',
+            data:{
+                username:'',
+                password:'',
+                relPassword:'',
+                users: [{id:1,username:'小明',password:'123'},
+                    {id:2,username:'小白',password:'123'}
+                ],
+            },
+            methods:{
+                add() {
+                    var user = { username:this.username,password:this.password }
+                   for(var i = 0;i <= this.users.length-1;i++ ) {
+                       if(this.users[i].username == user.username) {
+                           alert("用户名已存在！！！")
+                           return;
+                       }else{
+                           this.users.push(user)
+                           alert("注册成功！！！")
+                           return;
+                       }
+                    }
+                }
+
+            }
+        })
+    </script>
+
+</body>
+</html>

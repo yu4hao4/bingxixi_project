@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>购物车</title>
+
+
+    <link rel="stylesheet" href="../css/cart.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+
+
+</head>
+
+<body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="../js/utils.js"></script>
+<div id="app">
+    <h1>购物清单</h1>
+    <table>
+        <thead>
+        <tr>
+            <td>
+                <input type="checkbox" v-on:click="selectAll(isSelectAll)">
+                <label for="all">全选</label>
+            </td>
+            <td width="500">商品信息</td>
+            <td>单价</td>
+            <td>数量</td>
+            <td>金额</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(item, index) in list" :key="item.user_id">
+            <td>
+                <input type="checkbox" v-model="item.item_selected">
+            </td>
+            <td>
+                <img :src="item.item_photouri">
+                <div class="info">
+                    <h6>{{ item.item_type }}-{{ item.item_photouri }}</h6>
+                    <p>品牌：{{ item.item_name }} 产地：{{ item.item_name }}</p>
+                    <p>配送仓储：{{ item.item_description }}</p>
+                </div>
+            </td>
+            <td>{{ item.item_price }}</td>
+            <td><div class="num"><span v-on:click="item.num++">+</span><input type="text" v-model="item.item_num"><span v-on:click="item.num--">-</span></div></td>
+            <td>{{ item.item_price }}</td>
+            <td><button v-on:click="deleteNowGoods(index)">删除</button></td>
+        </tr>
+
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2"><button v-on:click="deleteGoods">删除所选商品</button></td>
+            <td colspan="4" class="text-right">{{ getGoodsNums.goodsNum }}件商品(不含运费)：{{ getGoodsNums.goodsPrice }}元 去结算</td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data:{
+            list:[]
+        },
+        methods:{
+            getList() {
+                postRequest("/myShoppingCartServlet?method=userShoppingCart").then(resp => {
+                    vm.list = (resp.data.data)
+                })
+            },
+            selectAll: function(e){
+                for(var i=0; i<this.list.length; i++){
+                    this.list[i].selected=!e;
+                }
+            },
+            deleteGoods:function(){
+                //过滤没有被选中的的商品重新赋值到购物车列表
+                this.list=this.list.filter(function(e){
+                    return !e.item_selected;
+                });
+            },
+            //删除单条商品
+            deleteNowGoods:function(index){
+                //根据索引删除list的记录
+                this.list.splice(index, 1);
+            }
+        },
+        computed:{
+            isSelectAll:function(){
+                return this.list.every(function(e){
+                    return e.item_selected;
+                });
+            },
+            getGoodsNums:function(e){
+                //已选中商品
+                var goods = this.list.filter(function(e){
+                    return e.item_selected;
+                });
+                //已选中商品总价格
+                var totalGoodsPrice=0;
+                for(var i=0; i<goods.length; i++){
+                    totalGoodsPrice+=goods[i].item_price*goods[i].item_num;
+                }
+                return {
+                    goodsNum:goods.length,
+                    goodsPrice:totalGoodsPrice
+                }
+            }
+        },
+        mounted:function(){
+            this.getList();
+        }
+    });
+</script>
+</body>
+
+</html>

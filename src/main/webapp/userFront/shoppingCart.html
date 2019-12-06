@@ -1,122 +1,177 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <link rel="stylesheet" href="css/bootstrap.css" />
-</head>
-<body>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <!-- import Vue before Element -->
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>购物车</title>
 
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <script src="../js/utils.js"></script>
-    <script src="../js/vue.js"></script>
-    <div id="app">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">添加品牌</h3>
+    <link rel="stylesheet" type="text/css" href="../css/indexStyle.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="../css/cart.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+
+
+</head>
+
+<body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="../js/utils.js"></script>
+<div class="header" id="top">
+    <div class="w">
+        <div class="fr">
+            <a href="index.html">返回主界面</a>
+            <small>|</small>
+            <a href="login.html">您好，请登录</a>
+            <small>|</small>
+            <a class="red" href="register.html">免费注册</a>
+            <small>|</small>
+            <a href="shoppingCart.html">我的订单</a>
+            <small>|</small>
+            <div class="text-block">
+                <a href="user.html">我的夕夕<i class="fa fa-angle-down"></i></a>
+                <div class="text-none myjd" style="width:150px; height:80px">
+                    <dl>
+                        <dt class="width50 fl">
+                            <img src="../image/no-img_mid_.jpg " style="width:60px;height:60px">
+                        </dt>
+                        <a href="login.html">您好，请登录</a>
+                        <div class="cb"></div>
+                    </dl>
+                    <div class="cb"></div>
+                </div>
             </div>
-            <div class="panel-body form-inline">
-                <lable>Id:
-                    <input type="text" class="form-control" v-model="id"/>
-                </lable>
-                <lable>Name:
-                    <input type="text" class="form-control" v-model="name" @keyup.enter="add"/>
-                </lable>
-                <input type="button" value="添加" class="btn btn-primary" @click="add"/>
-                <lable>搜索名称关键字:
-                    <input type="text" class="form-control" v-model="keywords"/>
-                </lable>
+
+            <small>|</small>
+            <a href="#">企业网购</a>
+            <small>|</small>
+            <div class="text-block">
+                <div class="text-none phonejd">
+                    <dl>
+                        <dt>
+                            <img src="../image/571497daNe857f9ed.png " >
+                        </dt>
+                    </dl>
+                </div>
             </div>
+
+
         </div>
-        <table class="table table-bordered table-hover table-striped">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Ctime</th>
-                <th>Operation</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="item in search(keywords)" :key="item.id">
-                <td>{{item.id}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.address}}</td>
-                <td>{{item.ctime | dataFormat}}</td>
-                <td><a href="" @click.prevent="del(item.id)">删除</a></td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="cb"></div>
     </div>
-    <script>
-        Vue.filter('dataFormat',function(dataStr){
-            var dt = new Date(dataStr)
-            var y = dt.getFullYear()
-            var m = dt.getMonth()+1
-            var d = dt.getDate()
-            return `${y}-${m}-${d}`
-        })
-        var vm = new Vue({
-            el:'#app',
-            data:{
-                list: [
-                    {url:'/images/001.jpg',id:1,name:111,price:'¥25'},
-                    {url:'/images/1.jpg',id:2,name:222,price:'¥26'},
-                    {url:'/images/002.png',id:3,name:333,price:'¥27'},
-                    {url:'/images/003.png',id:4,name:444,price:'¥28'}
-                ],
-                tableData: [{
-                    ctime:new Date(),
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    id:1
-                }, {
-                    ctime:new Date(),
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄',
-                    id:2
-                }, {
-                    ctime:new Date(),
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄',
-                    id:3
-                }, {
-                    ctime:new Date(),
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄',
-                    id:4
-                }]
+</div>
+<div id="app">
+    <h1 style="margin-top: 20px">购物清单</h1>
+    <table>
+        <thead>
+        <tr>
+            <td>
+                <input type="checkbox" v-on:click="selectAll(isSelectAll)">
+                <label for="all">全选</label>
+            </td>
+            <td width="500">商品信息</td>
+            <td>单价</td>
+            <td>数量</td>
+            <td>金额</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(item, index) in list" :key="item.user_id">
+            <td>
+                <input type="checkbox" v-model="item.item_selected">
+            </td>
+            <td>
+                <img :src="item.item_photouri">
+                <div class="info">
+                    <h6>{{ item.item_type }}-{{ item.item_photouri }}</h6>
+                    <p>品牌：{{ item.item_name }} 产地：{{ item.item_name }}</p>
+                    <p>配送仓储：{{ item.item_description }}</p>
+                </div>
+            </td>
+            <td>{{ item.item_price }}</td>
+            <td><div class="num"><span v-on:click="item.item.num++">+</span><input type="text" v-model="item.item_num"><span v-on:click="item.item.num--">-</span></div></td>
+            <td>{{ item.item_num }}</td>
+            <td><span v-on:click="deleteNowGoods(index)">删除</span></td>
+        </tr>
+
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2"><span v-on:click="deleteGoods">删除所选商品</span></td>
+            <td colspan="4" class="text-right">{{ getGoodsNums.goodsNum }}件商品(不含运费)：{{ getGoodsNums.goodsPrice }}元 去结算</td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data:{
+            list:[]
+        },
+        methods:{
+            getList() {
+                postRequest("/myShoppingCartServlet?method=userShoppingCart").then(resp => {
+                    vm.list = (resp.data.data)
+                    this.list.forEach(item => {
+                        console.log(resp.data.data)
+
+                    })
+                })
             },
-            methods: {
-                add() {
-                    //console.log('ok')
-                    var car = { id:this.id,name:this.name,ctime:new Date() }
-                    this.tableData.push(car)
-                    this.id = this.name = ''
-                },
-                del(id) {
-                    this.list.some((item,i) => {
-                        if(this.id == id) {
-                            this.tableData.splice(i,1);
-                            return true;
-                        }
-                    })
-                },
-                search(keywords) {
-                    return this.tableData.filter(item => {
-                        if(item.name.includes(keywords)) {
-                            return item
-                        }
-                    })
+            selectAll: function(e){
+                for(var i=0; i<this.list.length; i++){
+                    this.list[i].item_selected=!e;
+                }
+            },
+            deleteGoods:function(){
+                //过滤没有被选中的的商品重新赋值到购物车列表
+                this.list=this.list.filter(function(e){
+                    return !e.item_selected;
+                });
+            },
+            //删除单条商品
+            deleteNowGoods:function(index){
+                //根据索引删除list的记录
+                this.list.splice(index, 1);
+            }
+        },
+        computed:{
+            isSelectAll:function(){
+                return this.list.every(function(e){
+                    return e.item_selected;
+                });
+            },
+            getGoodsNums:function(e){
+                //已选中商品
+                var goods = this.list.filter(function(e){
+                    return e.item_selected;
+                });
+                //已选中商品总价格
+                var totalGoodsPrice=0;
+                for(var i=0; i<goods.length; i++){
+                    totalGoodsPrice+=goods[i].item_price*goods[i].item_num;
+                }
+                return {
+                    goodsNum:goods.length,
+                    goodsPrice:totalGoodsPrice
                 }
             }
-        })
-    </script>
-
+        },
+        mounted:function(){
+            this.getList();
+        }
+    });
+</script>
 </body>
+
 </html>

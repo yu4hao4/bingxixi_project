@@ -1,282 +1,92 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title></title>
+    <meta charset="utf-8">
+    <title>夕夕用户登录</title>
+    <meta name="description" content="particles.js is a lightweight JavaScript library for creating particles.">
+    <meta name="author" content="Vincent Garreau" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" media="screen" href="../css/login.css">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <style>
-        #foot{
-            margin-left:450px;
-        }
-        #line{
-            font-family: 隶书;
-            font-size: larger;
-        }
-        #app{
-            border-color: #122b40;
-            border-width: 2px;
-        }
-       #d2{
-           font-size: larger;
-           background-color: burlywood;
-           font-family: 黑体;
-           height: 25px;
-           width: 100%;
-           text-align: center;
-       }
-        li{
-            list-style: none;
-        }
-        element.style{
-             padding-left: 0px;
-             padding-right: 0px;
-         }
-
-    </style>
 </head>
 <body>
-    <div id="app">
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
 
-        <!-- 导航-->
-        <el-row :gutter="24" type="flex" class="row-bg" justify="space-around" id="ddd">
-            <el-col :span="22" style="padding: 0px">
-                <el-menu :default-active="activeIndex"
-                         class="el-menu-demo" mode="horizontal"
-                         @select="handlesSelect"
-                         background-color="#FF3333"
-                         text-color="#fff"
-                         active-text-color="#ffd04b">
-                    <el-menu-item><div style="font-size: large;font-family: 方正粗黑宋简体"> 夕夕网 </div></el-menu-item>
-                    <el-submenu>
-                        <template slot="title">城市</template>
-                        <el-menu-item v-for="pro in province" :key="pro.id">{{ pro.name }}</el-menu-item>
-                    </el-submenu>
-                    <el-menu-item><a href="register.html">注册</a></el-menu-item>
-                    <el-menu-item>我的夕夕</el-menu-item>
-                </el-menu>
-            </el-col>
-            <el-col :span="2" id="dddd" style="padding: 0px">
-                <el-menu :default-active="activeIndex"
-                         class="el-menu-demo"
-                         mode="horizontal"
-                         @select="shoppingCart"
-                         background-color="#FF3333"
-                         text-color="#fff"
-                         active-text-color="#ffd04b">
-                    <el-menu-item><a href="shoppingCart.html">购物车</a></el-menu-item>
-                </el-menu>
-            </el-col>
-        </el-row>
-
-        <el-row :gutter="20" style="margin-top: 10px">
-            <el-col :span="16" :offset="4">
-                <!--        搜索框-->
-                <div style="background-color:#ffffff; height:40px;width: 100%" >
-                    <el-col :span="8" :offset="6">
-                        <el-input
-                            placeholder="请输入搜索内容"
-                            v-model="input"
-                            clearable>
-                        </el-input>
-                    </el-col>
-                    <el-col :span="2">
-                        <el-button type="danger" plain @click="search">搜索</el-button>
-                    </el-col>
-                </div>
-            </el-col>
-        </el-row>
-
-
-        <el-row :gutter="20">
-            <el-col :span="16" :offset="4">
-                <div style="background-color:#ffffff; height:40px;width: 100%" >
-                </div>
-            </el-col>
-        </el-row>
-
-        <!-- 轮播图-->
-        <el-row>
-            <el-col :span="14" style="padding: 0px">
-                <el-carousel :interval="4000" type="card">
-                    <el-carousel-item v-for="item in list" :key="item.id" height="200px" width="500px">
-                        <img :src="item.url" height="200px" width="500px"/>
-                    </el-carousel-item>
-                </el-carousel>
-            </el-col>
-
-<!--            登录-->
-            <el-col :span="10" style="padding: 0px">
-                <el-row>
-                    <el-col :span="8" :offset="8">
-                        <img src="/images/xixiLogin.png">
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="1" :offset="4"><div class="el-icon-user" style="margin-top: 15px;margin-left: 5px"></div></el-col>
-                    <el-col :span="3"><div style="margin-top: 12px;">用户名：</div></el-col>
-                    <el-col :span="8"><div><el-input v-model="username" placeholder="请输入用户名" size="small" style="margin-top: 5px"></el-input></div></el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="1":offset="4">
-                        <div style="margin-top: 15px;margin-left: 5px" class="el-icon-lock"></div>
-                    </el-col>
-                    <el-col :span="3"><div style="margin-top: 12px;">密&nbsp;&nbsp;码：</div></el-col>
-                    <el-col :span="8"><div>
-                        <el-input placeholder="请输入密码" v-model="password" show-password size="small" style="margin-top: 5px"></el-input>
-                    </div>
-                    </el-col>
-
-                </el-row>
-                <el-row style="margin-top: 5px">
-                    <el-col :offset="4"><a href="register.html">还没有xixi号？注册一个</a>
-                    </el-col>
-
-                </el-row>
-                <el-row style="margin-top: 5px">
-                    <el-col :span="4":offset="4">
-                        <el-button type="danger" round><a href="register.html" style="color: white">登录</a></el-button>
-                    </el-col>
-                    <el-col span="4">
-                        <el-button type="danger" round><a href="register.html" style="color: white">注册</a></el-button>
-                    </el-col>
-                    <el-col span="4">
-                        <el-button type="danger" round><a href="register.html" style="color: white">开店</a></el-button>
-                    </el-col>
-                </el-row>
-
-            </el-col>
-        </el-row>
-
-<!--        商品-->
-        <ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
-            <li>
-                <h3>为你推荐</h3>
-            </li>
-            <li v-for="(i,key) in list"
-                :key=key
-                class="infinite-list-item">
-                <el-row :gutter="16">
-                    <el-col :span="16" :offset="4">
-                        <el-row>
-                            <el-col :span="6">
-                                <img :src="i.url" style="height:200px;width:80%;margin-left: 10%"/>
-                                <div style="margin-left: 10%">价格：{{ i.price }}</div>
-                            </el-col>
-                            <el-col :span="6">
-                                <img :src="i.url" style="height:200px;width:80%;margin-left: 10%"/>
-                                <div style="margin-left: 10%">价格：{{ i.price }}</div>
-                            </el-col>
-                            <el-col :span="6">
-                                <img :src="i.url" style="height:200px;width:80%;margin-left: 10%"/>
-                                <div style="margin-left: 10%">价格：{{ i.price }}</div>
-                            </el-col>
-                            <el-col :span="6">
-                                <img :src="i.url" style="height:200px;width:80%;margin-left: 10%"/>
-                                <div style="margin-left: 10%">价格：{{ i.price }}</div>
-                            </el-col>
-                        </el-row>
-                    </el-col>
-                </el-row>
-            </li>
-            <li><div id="d2">
-                极爱家
-            </div></li>
-            <li  v-for="(i,key) in list"
-                 :key=key
-                 class="infinite-list-item">
-
-
-                <el-row :span="16" >
-                    <el-col :span="16" :offset="4">
-                        <el-col :span="6">
-                            <div style="background-color:#ac2925; height:200px;width:80%;margin-left: 10%" >
-                            </div>
-                        </el-col>
-                        <el-col :span="6">
-                            <div style="background-color:#4cae4c; height:200px;width:80%;margin-left: 10%" >
-                            </div>
-                        </el-col>
-                        <el-col :span="6">
-                            <div style="background-color:#ac2925; height:200px;width:80%;margin-left: 10%" >
-                            </div>
-                        </el-col>
-                        <el-col :span="6">
-                            <div style="background-color:#4cae4c; height:200px;width:80%;margin-left: 10%" >
-                            </div>
-                        </el-col>
-                    </el-col>
-                </el-row>
-            </li>
-        </ul>
-
-        <el-divider content-position="center"><div id="line">人家也是有底线的</div></el-divider>
-
-<br><br><br>
-        <el-divider content-position="center"></el-divider>
-        <div id="foot">夕夕集团
-            <el-divider direction="vertical"></el-divider>
-            夕夕网
-            <el-divider direction="vertical"></el-divider>
-            <a href="https://www.baidu.com">全球速递</a>
-            <el-divider direction="vertical"></el-divider>
-            <a href="https://www.baidu.com">可可网站</a>
-            <el-divider direction="vertical"></el-divider>
-            <a href="https://www.baidu.com">炸天邦公司</a>
-            <el-divider direction="vertical"></el-divider>
-            <a href="https://www.baidu.com">咸米集团</a>
-            <el-divider direction="vertical"></el-divider>
-            <a href="https://www.baidu.com">关于我们</a>
-            <el-divider direction="vertical"></el-divider>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="../js/utils.js"></script>
+<!-- particles.js container -->
+<div id="particles-js" style="display: flex;align-items: center;justify-content: center">
+</div>
+<div class="login-page">
+    <div class="login-content">
+        <div class="login-tit">登录</div>
+        <div id="app">
+            <el-input type="text" placeholder="用户名/手机号" v-model="username"
+                   style="width: 90%;
+                 margin:20px auto 0 auto;
+                 background: rgba(0, 0, 0, 0);
+                 border: 0;
+                 height: 30px;
+                 width: 100%;
+                 line-height: 30px;
+                 color: #fff;
+                 border-bottom: 1px solid rgba(40, 144, 250, 0.4);
+                 outline:none;"></el-input>
+            <el-input type="password" placeholder="密码" v-model="password"
+                   style="width: 90%;
+                 margin: 20px auto 0 auto;
+                 background: rgba(0, 0, 0, 0);
+                 border: 0;
+                 height: 30px;
+                 width: 100%;
+                 color: #fff;
+                 border-bottom: 1px solid rgba(40, 144, 250, 0.4);
+                 outline:none;"></el-input>
+            <el-button type="primary" style="margin-top: 40px" @click="login">登录</el-button>
         </div>
-        <el-divider content-position="center"></el-divider>
-
-
 
     </div>
+</div>
 
 
-
-
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <!-- import Vue before Element -->
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
-
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <script src="../js/utils.js"></script>
-    <script>
-        var vm = new Vue({
-            el:'#app',
-            data:{
-                username:'',
-                password:'',
-                user: {username:'小明',password:'123'},
-                return:{ input:'' },
-                list: [
-                    {url:'/images/001.jpg',id:1,price:'¥25'},
-                    {url:'/images/1.jpg',id:2,price:'¥26'},
-                    {url:'/images/002.png',id:3,price:'¥27'},
-                    {url:'/images/003.png',id:4,price:'¥28'}
-                ],
-                province:[
-                    { id:1,name:'湖南' },
-                    { id:2,name:'湖北' },
-                    { id:3,name:'河南' },
-                    { id:4,name:'河北' }
-                ],
-            },
-            methods: {
-                entry() {
-                    if(this.username == this.user.username && this.password == this.user.password) {
-
+<!-- scripts -->
+<script src="../js/particles.js"></script>
+<script src="../js/app.js"></script>
+<script>
+    var _this = new Vue( {
+        el:'#app',
+        data:{
+            username:'',
+            password:'',
+        },
+        methods:{
+            login:function() {
+                postRequest("/userServlet?method=userLogin",{
+                    user_name: _this.username,
+                    user_pass:_this.password,
+                }).then(resp => {
+                    if(resp.data.data == true) {
+                        _this.$message('登录成功');
+                        location.href = "/userFront/index.html";
+                    }else {
+                        _this.$message('登录失败');
                     }
-                },
-                handleSelect(key, keyPath) {
-                    console.log(key, keyPath);
-                },
-                shoppingCart() {
-                }
-            }
-        });
-    </script>
+
+                })
+            },
+        }
+    } )
+    function changeImg(){
+        let pic = document.getElementById('picture');
+        console.log(pic.src)
+        if(pic.getAttribute("src",2) =="../img/check.png"){
+            pic.src ="../img/checked.png"
+        }else{
+            pic.src ="../img/check.png"
+        }
+    }
+</script>
 </body>
 </html>
