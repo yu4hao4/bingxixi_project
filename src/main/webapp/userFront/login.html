@@ -55,7 +55,7 @@
 <script src="../js/particles.js"></script>
 <script src="../js/app.js"></script>
 <script>
-    var _this = new Vue( {
+    let _this = new Vue( {
         el:'#app',
         data:{
             username:'',
@@ -77,11 +77,11 @@
                 })
             },
         }
-    } )
+    } );
     function changeImg(){
         let pic = document.getElementById('picture');
         console.log(pic.src)
-        if(pic.getAttribute("src",2) =="../img/check.png"){
+        if(pic.getAttribute("src",2) ==="../img/check.png"){
             pic.src ="../img/checked.png"
         }else{
             pic.src ="../img/check.png"

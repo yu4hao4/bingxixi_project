@@ -5,26 +5,26 @@
     <title>商家管理</title>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <style>
-        .el-header, .el-footer {
-            background-color: #B3C0D1;
-            color: #333;
-            text-align: center;
-            line-height: 60px;
-        }
-
-        .el-aside {
-            background-color: #D3DCE6;
-            color: #333;
-            text-align: center;
-            line-height: 200px;
-        }
-
-        .el-main {
-            background-color: #E9EEF3;
-            color: #333;
-            text-align: center;
-            line-height: 160px;
-        }
+        /*.el-header, .el-footer {*/
+        /*    background-color: #B3C0D1;*/
+        /*    color: #333;*/
+        /*    text-align: center;*/
+        /*    line-height: 60px;*/
+        /*}*/
+        
+        /*.el-aside {*/
+        /*    background-color: #D3DCE6;*/
+        /*    color: #333;*/
+        /*    text-align: center;*/
+        /*    line-height: 200px;*/
+        /*}*/
+        
+        /*.el-main {*/
+        /*    background-color: #E9EEF3;*/
+        /*    color: #333;*/
+        /*    text-align: center;*/
+        /*    line-height: 160px;*/
+        /*}*/
 
         body > .el-container {
             margin-bottom: 40px;
@@ -42,6 +42,7 @@
 </head>
 <body>
 <div id="app">
+<!--    菜单栏-->
     <el-row>
         <el-menu class="el-menu-demo"
                  mode="horizontal"
@@ -63,8 +64,10 @@
             </el-submenu>
         </el-menu>
     </el-row>
-    <el-row>
-        <el-col :span="3">
+    
+<!--    主体代码位置-->
+    <el-container>
+<!--        <el-col :span="3">-->
             <el-aside width="200px">
                 <el-menu
                         default-active="3"
@@ -97,8 +100,9 @@
                     </el-menu-item>
                 </el-menu>
             </el-aside>
-        </el-col>
-        <el-col :span="21">
+<!--        </el-col>-->
+<!--        <el-col :span="21">-->
+        <el-main>
             <el-row>
                 <div style="height: 20px"></div>
             </el-row>
@@ -189,8 +193,11 @@
                     </el-pagination>
                 </el-col>
             </el-row>
-        </el-col>
-    </el-row>
+<!--        </el-col>-->
+        </el-main>
+    </el-container>
+    
+    
     <el-dialog title="发货信息" :visible.sync="visible">
         <el-form :model="dialogData">
             <el-form-item label="订单编号" :label-width="formLabelWidth">

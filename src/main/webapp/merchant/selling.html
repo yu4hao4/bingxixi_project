@@ -29,30 +29,30 @@
             height: 150px;
             display: block;
         }
-        .el-header, .el-footer {
-            background-color: #B3C0D1;
-            color: #333;
-            text-align: center;
-            line-height: 60px;
-        }
-
-        .el-aside {
-            background-color: #D3DCE6;
-            color: #333;
-            text-align: center;
-            line-height: 200px;
-        }
-
-        .el-main {
-            background-color: #E9EEF3;
-            color: #333;
-            text-align: center;
-            line-height: 160px;
-        }
-
-        body > .el-container {
-            margin-bottom: 40px;
-        }
+        /*.el-header, .el-footer {*/
+        /*    background-color: #B3C0D1;*/
+        /*    color: #333;*/
+        /*    text-align: center;*/
+        /*    line-height: 60px;*/
+        /*}*/
+        
+        /*.el-aside {*/
+        /*    background-color: #D3DCE6;*/
+        /*    color: #333;*/
+        /*    text-align: center;*/
+        /*    line-height: 200px;*/
+        /*}*/
+        
+        /*.el-main {*/
+        /*    background-color: #E9EEF3;*/
+        /*    color: #333;*/
+        /*    text-align: center;*/
+        /*    line-height: 160px;*/
+        /*}*/
+        
+        /*body > .el-container {*/
+        /*    margin-bottom: 40px;*/
+        /*}*/
 
         .el-container:nth-child(5) .el-aside,
         .el-container:nth-child(6) .el-aside {
@@ -66,6 +66,7 @@
 </head>
 <body>
 <div id="app">
+<!--    header 部分-->
     <el-row>
         <el-menu class="el-menu-demo"
                  mode="horizontal"
@@ -87,9 +88,9 @@
             </el-submenu>
         </el-menu>
     </el-row>
-    <el-row>
-        <el-col :span="3">
-            <el-aside width="200px">
+    
+    <el-container>
+        <el-aside width="200px">
                 <el-menu
                         default-active="1-1"
                         class="el-menu-vertical-demo">
@@ -120,10 +121,8 @@
                         <span slot="title">订单</span>
                     </el-menu-item>
                 </el-menu>
-
             </el-aside>
-        </el-col>
-        <el-col :span="21">
+        <el-main>
             <el-row>
                 <div style="height: 20px"></div>
             </el-row>
@@ -194,8 +193,12 @@
                     </el-pagination>
                 </el-col>
             </el-row>
-        </el-col>
-    </el-row>
+        </el-main>
+    </el-container>
+    
+    
+    
+<!--    弹框-->
     <el-dialog title="修改商家信息" :visible.sync="changeInfo">
         <el-form ref="form" :model="dialogData1" label-width="80px">
             <el-form-item label="更改头像">

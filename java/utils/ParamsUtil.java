@@ -2,14 +2,9 @@ package utils;
 
 import com.alibaba.dubbo.common.utils.IOUtils;
 import com.alibaba.fastjson.JSONObject;
-<<<<<<< HEAD
-import com.sun.tools.javac.util.Convert;
-
-=======
 import jdk.internal.org.objectweb.asm.tree.InnerClassNode;
 
 import javax.rmi.ssl.SslRMIClientSocketFactory;
->>>>>>> 71bb150c3396780b70b2f58948949d8f1f5ea2f5
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -24,10 +19,6 @@ public class ParamsUtil {
         this.getJSONObject(request);
     }
     public  <T> T postGetParams(Class<T> clazz) throws IOException {
-<<<<<<< HEAD
-=======
-        System.out.println(jsonObject);
->>>>>>> 71bb150c3396780b70b2f58948949d8f1f5ea2f5
         if(jsonObject == null || jsonObject.isEmpty()) {
             return null;
         }
@@ -49,30 +40,30 @@ public class ParamsUtil {
             }
         }
         for (String key:jsonObject.keySet()
-<<<<<<< HEAD
-        ) {
-            Method m = methodMap.get(key);
-            Class<?>[] name = m.getParameterTypes();
-            Class<?> c = name[0];
-            Object object = jsonObject.get(key);
-            String str =  (String)jsonObject.get(key);
-            if (c == Integer.class) {
-                object = new Integer(str);
-            }else if(c == Float.class) {
-                object = new Float(str);
-            }else if(c == Double.class) {
-                object = new Double(str);
-            }else if(c == String.class) {
-                object = str;
-            }else if(c == Long.class) {
-                object = new Long(str);
-            }else if(c == Boolean.class) {
-                object = new Boolean(str);
-            }
-            m.setAccessible(true);
-            try {
-                m.invoke(t, object);
-=======
+//<<<<<<< HEAD
+//        ) {
+//            Method m = methodMap.get(key);
+//            Class<?>[] name = m.getParameterTypes();
+//            Class<?> c = name[0];
+//            Object object = jsonObject.get(key);
+//            String str =  (String)jsonObject.get(key);
+//            if (c == Integer.class) {
+//                object = new Integer(str);
+//            }else if(c == Float.class) {
+//                object = new Float(str);
+//            }else if(c == Double.class) {
+//                object = new Double(str);
+//            }else if(c == String.class) {
+//                object = str;
+//            }else if(c == Long.class) {
+//                object = new Long(str);
+//            }else if(c == Boolean.class) {
+//                object = new Boolean(str);
+//            }
+//            m.setAccessible(true);
+//            try {
+//                m.invoke(t, object);
+//=======
              ) {
             Method m = methodMap.get(key);
             m.setAccessible(true);
@@ -89,7 +80,7 @@ public class ParamsUtil {
                 }else if(temp == Double.class) {
                     m.invoke(t, Double.parseDouble(value));
                 }
->>>>>>> 71bb150c3396780b70b2f58948949d8f1f5ea2f5
+//>>>>>>> 71bb150c3396780b70b2f58948949d8f1f5ea2f5
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {

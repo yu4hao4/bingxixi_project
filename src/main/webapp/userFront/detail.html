@@ -127,11 +127,8 @@
         </div>
         <script>
             $(document).ready(function(){
-                //����ı������
                 var t = $("#text_box");
-                //��ʼ������Ϊ1,��ʧЧ��
                 $('#min').attr('disabled',true);
-                //�������Ӳ���
                 $("#add").click(function(){
                     t.val(parseInt(t.val())+1)
                     if (parseInt(t.val())!=1){
@@ -139,7 +136,6 @@
                     }
 
                 })
-                //�������ٲ���
                 $("#min").click(function(){
                     t.val(parseInt(t.val())-1);
                     if (parseInt(t.val())==1){
