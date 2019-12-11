@@ -1,4 +1,4 @@
-package service;
+package service.inf;
 
 import entity.User;
 import entity.UserInfo;

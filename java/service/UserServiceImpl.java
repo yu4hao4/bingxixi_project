@@ -1,10 +1,10 @@
-package service.impl;
+package service;
 
-import dao.UserDao;
-import dao.impl.UserDaoImpl;
+import dao.inf.UserDao;
+import dao.UserDaoImpl;
 import entity.User;
 import entity.UserInfo;
-import service.UserService;
+import service.inf.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;

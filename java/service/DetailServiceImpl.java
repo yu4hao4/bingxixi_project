@@ -1,9 +1,9 @@
-package service.impl;
+package service;
 
-import dao.DetailDao;
-import dao.impl.DetailDaoImpl;
+import dao.inf.DetailDao;
+import dao.DetailDaoImpl;
 import entity.DetailImg;
-import service.DetailService;
+import service.inf.DetailService;
 
 public class DetailServiceImpl implements DetailService {
     DetailDao detailDao = new DetailDaoImpl();

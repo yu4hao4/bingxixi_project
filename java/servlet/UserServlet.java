@@ -2,12 +2,9 @@ package servlet;
 
 import entity.User;
 import entity.UserInfo;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import service.UserService;
-import service.impl.UserServiceImpl;
+import service.inf.UserService;
+import service.UserServiceImpl;
 import utils.BaseServlet;
-import utils.JDBCUtil;
 import utils.ParamsUtil;
 
 import javax.servlet.annotation.WebServlet;

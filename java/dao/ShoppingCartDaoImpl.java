@@ -1,6 +1,6 @@
-package dao.impl;
+package dao;
 
-import dao.ShoppingCartDao;
+import dao.inf.ShoppingCartDao;
 import entity.MyShoppingCart;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;

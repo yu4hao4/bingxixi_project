@@ -1,6 +1,6 @@
-package dao.impl;
+package dao;
 
-import dao.DetailDao;
+import dao.inf.DetailDao;
 import entity.DetailImg;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;

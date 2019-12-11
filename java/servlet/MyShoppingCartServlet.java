@@ -1,17 +1,14 @@
 package servlet;
 
-import entity.User;
-import service.ShoppingCartService;
-import service.impl.ShoppingCartServiceImpl;
+import service.inf.ShoppingCartService;
+import service.ShoppingCartServiceImpl;
 import utils.BaseServlet;
 import utils.ParamsUtil;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/myShoppingCartServlet")

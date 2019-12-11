@@ -1,8 +1,8 @@
 package servlet;
 
 import entity.DetailImg;
-import service.DetailService;
-import service.impl.DetailServiceImpl;
+import service.inf.DetailService;
+import service.DetailServiceImpl;
 import utils.BaseServlet;
 import utils.ParamsUtil;
 

@@ -1,6 +1,6 @@
-package dao.impl;
+package dao;
 
-import dao.UserDao;
+import dao.inf.UserDao;
 import entity.User;
 import entity.UserInfo;
 import org.apache.commons.dbutils.QueryRunner;

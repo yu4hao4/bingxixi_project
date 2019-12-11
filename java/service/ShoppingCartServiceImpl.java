@@ -1,8 +1,8 @@
-package service.impl;
+package service;
 
-import dao.ShoppingCartDao;
-import dao.impl.ShoppingCartDaoImpl;
-import service.ShoppingCartService;
+import dao.inf.ShoppingCartDao;
+import dao.ShoppingCartDaoImpl;
+import service.inf.ShoppingCartService;
 
 import java.util.List;
 
